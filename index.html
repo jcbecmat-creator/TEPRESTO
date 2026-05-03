@@ -52,7 +52,7 @@
 
         .input-group {
             position: relative;
-            margin-bottom: 12px; 
+            margin-bottom: 6px; /* Espacio reducido a la mitad */
             text-align: left;
         }
 
@@ -98,11 +98,11 @@
         }
 
         #mensaje {
-            margin-bottom: 8px; 
+            margin-bottom: 4px; /* Espacio reducido a la mitad */
             margin-top: 0;
             font-size: 13px; 
             font-weight: bold;
-            min-height: 18px; 
+            min-height: 15px; /* Altura mínima reducida */
         }
 
         /* Estilos base para los tres botones */
@@ -126,10 +126,10 @@
 
         /* Botón Iniciar Sesión */
         .login-button {
-            background-color: #077B4A; 
+            background-color: #06A05F; /* Mismo color del fondo */
         }
         .login-button:hover {
-            background-color: #055C37; 
+            background-color: #058A52; /* Verde ligeramente más oscuro al pasar el cursor */
         }
         .login-button:disabled {
             background-color: #60a889; 
@@ -138,10 +138,10 @@
 
         /* Botón Quiero un préstamo */
         .btn-prestamo {
-            background-color: #09384C; 
+            background-color: #06A05F; /* Mismo color del fondo */
         }
         .btn-prestamo:hover {
-            background-color: #062634; 
+            background-color: #058A52; /* Verde ligeramente más oscuro al pasar el cursor */
         }
 
         /* Botón Quiero prestar */
@@ -195,11 +195,11 @@
         </button>
         
         <button type="button" class="btn-prestamo" onclick="window.location.href='#'">
-            Quiero un préstamo
+            <i class="fas fa-hand-holding-usd"></i> Quiero un préstamo
         </button>
         
         <button type="button" class="btn-prestar" onclick="window.location.href='#'">
-            Quiero prestar
+            <i class="fas fa-wallet"></i> Quiero prestar
         </button>
     </div>
 
