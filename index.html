@@ -31,7 +31,7 @@
         }
 
         .main-logo {
-            width: 260px; /* Logotipo grande */
+            width: 260px; 
             height: auto;
             margin-top: 0px; 
             margin-bottom: 15px; 
@@ -97,85 +97,59 @@
             font-size: 16px; 
         }
 
-        /* Botón Iniciar Sesión */
-        .login-button {
-            background-color: #077B4A; 
-            color: #ffffff;
-            border: none;
-            padding: 18px; 
-            border-radius: 6px;
-            font-size: 17px; 
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 5px;
-            margin-bottom: 5px; 
-            transition: background-color 0.3s;
-        }
-        
-        .login-button:hover {
-            background-color: #055C37; 
-        }
-        
-        .login-button:disabled {
-            background-color: #60a889; 
-            cursor: not-allowed;
-        }
-
         #mensaje {
-            margin-bottom: 5px;
-            margin-top: 10px;
+            margin-bottom: 15px;
             font-size: 13px; 
             font-weight: bold;
             min-height: 18px; 
         }
 
-        /* Línea divisoria */
-        .divider {
-            height: 1px;
-            background-color: #e0e0e0;
-            margin: 20px 0;
+        /* Estilos base para los tres botones */
+        .login-button, .btn-prestamo, .btn-prestar {
+            color: #ffffff;
+            border: none;
+            padding: 15px; /* Relleno reducido */
+            border-radius: 6px;
+            font-size: 15px; /* Tamaño de texto reducido */
+            font-weight: bold;
+            cursor: pointer;
             width: 100%;
+            margin-top: 0;
+            margin-bottom: 12px; /* Separación idéntica entre botones */
+            transition: background-color 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px; /* Espacio entre el icono y el texto */
+        }
+
+        /* Botón Iniciar Sesión */
+        .login-button {
+            background-color: #077B4A; 
+        }
+        .login-button:hover {
+            background-color: #055C37; 
+        }
+        .login-button:disabled {
+            background-color: #60a889; 
+            cursor: not-allowed;
         }
 
         /* Botón Quiero un préstamo */
         .btn-prestamo {
             background-color: #09384C; 
-            color: #ffffff;
-            border: none;
-            padding: 18px; 
-            border-radius: 6px;
-            font-size: 17px; 
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 5px;
-            margin-bottom: 10px; 
-            transition: background-color 0.3s;
         }
-        
         .btn-prestamo:hover {
-            background-color: #062634; /* Azul más oscuro */
+            background-color: #062634; 
         }
 
         /* Botón Quiero prestar */
         .btn-prestar {
-            background-color: #077B4A; /* Mismo verde que el inicio de sesión */
-            color: #ffffff;
-            border: none;
-            padding: 18px; 
-            border-radius: 6px;
-            font-size: 17px; 
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 5px;
-            margin-bottom: 5px; 
-            transition: background-color 0.3s;
+            background-color: #05C574; /* Nuevo color verde solicitado */
+            margin-bottom: 0; /* El último botón no necesita margen inferior */
         }
-        
         .btn-prestar:hover {
-            background-color: #055C37; /* Verde más oscuro */
+            background-color: #04A863; /* Verde un poco más oscuro al pasar el cursor */
         }
 
         .copyright {
@@ -213,16 +187,20 @@
             </div>
         </div>
 
-        <button type="button" class="login-button" id="btn-login" onclick="iniciarSesion()">Iniciar sesión</button>
-        
+        <!-- Contenedor de mensajes reubicado arriba de los botones para evitar espacios irregulares -->
         <div id="mensaje"></div>
 
-        <!-- Línea separadora -->
-        <div class="divider"></div>
-
-        <!-- Nuevos botones -->
-        <button type="button" class="btn-prestamo" onclick="window.location.href='#'">Quiero un préstamo</button>
-        <button type="button" class="btn-prestar" onclick="window.location.href='#'">Quiero prestar</button>
+        <button type="button" class="login-button" id="btn-login" onclick="iniciarSesion()">
+            <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+        </button>
+        
+        <button type="button" class="btn-prestamo" onclick="window.location.href='#'">
+            Quiero un préstamo
+        </button>
+        
+        <button type="button" class="btn-prestar" onclick="window.location.href='#'">
+            Quiero prestar
+        </button>
     </div>
 
     <div class="copyright">
@@ -253,7 +231,8 @@
                 return;
             }
 
-            btnLogin.innerText = "Validando...";
+            // Cambiamos el texto pero mantenemos el icono mientras valida
+            btnLogin.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Validando...';
             btnLogin.disabled = true;
             mensajeDiv.innerText = "";
             
@@ -268,7 +247,7 @@
             })
             .then(response => response.json())
             .then(respuesta => {
-                btnLogin.innerText = "Iniciar sesión";
+                btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
                 btnLogin.disabled = false;
                 
             if(respuesta.success) {
@@ -288,7 +267,7 @@
                 }
             })
             .catch(error => {
-                btnLogin.innerText = "Iniciar sesión";
+                btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
                 btnLogin.disabled = false;
                 mensajeDiv.style.color = "#d93025";
                 mensajeDiv.innerText = "Error de red. Reintenta.";
