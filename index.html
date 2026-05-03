@@ -31,23 +31,22 @@
         }
 
         .main-logo {
-            width: 260px; /* ¡Logotipo aún más grande! */
+            width: 260px; /* Logotipo grande */
             height: auto;
             margin-top: 0px; 
             margin-bottom: 15px; 
         }
 
         .slogan-text {
-            /* Estilo que tenía anteriormente 'Bienvenido' */
             font-size: 16px; 
             color: #333333;
             margin-bottom: 25px; 
         }
 
         .welcome-text {
-            font-size: 22px; /* Un poco más grande */
-            color: #000000; /* Color negro */
-            font-weight: bold; /* En negrita para destacar */
+            font-size: 22px; 
+            color: #000000; 
+            font-weight: bold; 
             margin-bottom: 25px; 
         }
 
@@ -60,7 +59,7 @@
         .input-group label {
             display: block;
             font-size: 13px; 
-            color: #000000; /* Color negro */
+            color: #000000; 
             margin-bottom: 8px; 
             font-weight: 600;
         }
@@ -98,8 +97,9 @@
             font-size: 16px; 
         }
 
+        /* Botón Iniciar Sesión */
         .login-button {
-            background-color: #077B4A; /* Botón verde */
+            background-color: #077B4A; 
             color: #ffffff;
             border: none;
             padding: 18px; 
@@ -114,20 +114,68 @@
         }
         
         .login-button:hover {
-            background-color: #055C37; /* Verde más oscuro al pasar el cursor */
+            background-color: #055C37; 
         }
         
         .login-button:disabled {
-            background-color: #60a889; /* Verde deslavado si está deshabilitado */
+            background-color: #60a889; 
             cursor: not-allowed;
         }
 
         #mensaje {
             margin-bottom: 5px;
-            margin-top: 15px;
+            margin-top: 10px;
             font-size: 13px; 
             font-weight: bold;
             min-height: 18px; 
+        }
+
+        /* Línea divisoria */
+        .divider {
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        /* Botón Quiero un préstamo */
+        .btn-prestamo {
+            background-color: #09384C; 
+            color: #ffffff;
+            border: none;
+            padding: 18px; 
+            border-radius: 6px;
+            font-size: 17px; 
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 5px;
+            margin-bottom: 10px; 
+            transition: background-color 0.3s;
+        }
+        
+        .btn-prestamo:hover {
+            background-color: #062634; /* Azul más oscuro */
+        }
+
+        /* Botón Quiero prestar */
+        .btn-prestar {
+            background-color: #077B4A; /* Mismo verde que el inicio de sesión */
+            color: #ffffff;
+            border: none;
+            padding: 18px; 
+            border-radius: 6px;
+            font-size: 17px; 
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 5px;
+            margin-bottom: 5px; 
+            transition: background-color 0.3s;
+        }
+        
+        .btn-prestar:hover {
+            background-color: #055C37; /* Verde más oscuro */
         }
 
         .copyright {
@@ -142,13 +190,10 @@
 <body>
 
     <div class="login-box">
-        <!-- Logo principal más grande -->
         <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" alt="Logo PrestaMas" class="main-logo">
         
-        <!-- Eslogan con el estilo original de 'Bienvenido' -->
         <div class="slogan-text">Préstamos ágiles para ti</div>
         
-        <!-- Texto de Bienvenido modificado -->
         <div class="welcome-text">Bienvenido</div>
 
         <div class="input-group">
@@ -171,6 +216,13 @@
         <button type="button" class="login-button" id="btn-login" onclick="iniciarSesion()">Iniciar sesión</button>
         
         <div id="mensaje"></div>
+
+        <!-- Línea separadora -->
+        <div class="divider"></div>
+
+        <!-- Nuevos botones -->
+        <button type="button" class="btn-prestamo" onclick="window.location.href='#'">Quiero un préstamo</button>
+        <button type="button" class="btn-prestar" onclick="window.location.href='#'">Quiero prestar</button>
     </div>
 
     <div class="copyright">
@@ -205,7 +257,6 @@
             btnLogin.disabled = true;
             mensajeDiv.innerText = "";
             
-            // LA URL DE TU SCRIPT DE GOOGLE
             var scriptURL = "https://script.google.com/macros/s/AKfycbyQBuAUlC0bc8dYgUHgwbTNOa7ut6dKB_Ls6sqgDbKyHF51zKofE9cQ7rWp_SH2X9k/exec";
 
             fetch(scriptURL, {
