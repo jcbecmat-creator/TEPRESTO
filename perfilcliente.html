@@ -1,1 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea tu perfil - PrestaMas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #05C574;
+            --dark-blue: #09384C;
+            --bg-light: #f8f9fa;
+            --text-main: #1d2d35;
+            --border-color: #d1d9e0;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        /* Header Estilo YoTePresto */
+        header {
+            padding: 15px 40px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 20px;
+        }
+
+        .logo-img { height: 40px; }
+
+        .header-title {
+            font-size: 18px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 20px;
+            color: var(--text-main);
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 0 20px;
+            padding-bottom: 100px;
+        }
+
+        .step-info {
+            text-align: center;
+            color: #6a737d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--dark-blue);
+            font-size: 26px;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .form-step { display: none; }
+        .form-step.active { display: block; animation: fadeIn 0.5s; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--dark-blue);
+        }
+
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--primary-green); box-shadow: 0 0 5px rgba(5, 197, 116, 0.2); }
+
+        /* Botones de Opción (Género, Plazos, etc) */
+        .options-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .opt-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .opt-btn.active {
+            border-color: var(--primary-green);
+            background-color: #e8f9f1;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+
+        /* Documentos */
+        .doc-card {
+            border: 1px dashed var(--border-color);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: var(--bg-light);
+        }
+
+        .btn-cam {
+            background-color: var(--dark-blue);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* Navegación Inferior */
+        .nav-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            border-top: 1px solid var(--border-color);
+            z-index: 100;
+        }
+
+        .btn-nav {
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            min-width: 150px;
+        }
+
+        .btn-back { background: transparent; color: var(--primary-green); border: 1px solid var(--primary-green); }
+        .btn-next { background: var(--primary-green); color: white; }
+
+        .info-yellow {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #ffeeba;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" class="logo-img" alt="PrestaMas">
+    <div class="header-title">Crea tu perfil de Cliente</div>
+</header>
+
+<div class="container">
+    <form id="perfilForm">
+        
+        <div class="form-step active" id="step1">
+            <p class="step-info">Paso 1 de 10</p>
+            <h2>¿Cómo te llamas?</h2>
+            <label>Nombre(s)</label>
+            <input type="text" id="nombre" placeholder="Ej. Juan Carlos">
+            <label>Primer apellido</label>
+            <input type="text" id="apellidop" placeholder="Ej. Becerra">
+            <label>Segundo apellido</label>
+            <input type="text" id="apellidom" placeholder="Ej. Mata">
+            <label>Género</label>
+            <div class="options-flex">
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'genero')">Hombre</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'genero')">Mujer</button>
+            </div>
+        </div>
+
+        <div class="form-step" id="step2">
+            <p class="step-info">Paso 2 de 10</p>
+            <h2>¿Cuándo y dónde naciste?</h2>
+            <label>Fecha de nacimiento</label>
+            <div style="display: flex; gap:10px">
+                <select id="dia"><option>Día</option></select>
+                <select id="mes"><option>Mes</option></select>
+                <select id="anio"><option>Año</option></select>
+            </div>
+            <label>Estado de nacimiento</label>
+            <select id="estado_nac">
+                <option value="">Selecciona el estado</option>
+                <option>MEXICO</option>
+                <option>CIUDAD DE MÉXICO</option>
+                <option>JALISCO</option>
+                </select>
+        </div>
+
+        <div class="form-step" id="step3">
+            <p class="step-info">Paso 3 de 10</p>
+            <h2>¿Cuál es tu CURP?</h2>
+            <input type="text" id="curp" placeholder="Ingresa tu CURP de 18 dígitos">
+            <div class="info-yellow">
+                <i class="fas fa-info-circle"></i> Asegúrate de que tu CURP coincida exactamente con tu identificación oficial.
+            </div>
+        </div>
+
+        <div class="form-step" id="step4">
+            <p class="step-info">Paso 4 de 10</p>
+            <h2>Confirma tu préstamo</h2>
+            <label>Monto</label>
+            <input type="number" id="monto" value="137000">
+            <label>Meses</label>
+            <div class="options-flex">
+                <button type="button" class="opt-btn">6</button>
+                <button type="button" class="opt-btn">12</button>
+                <button type="button" class="opt-btn active">18</button>
+                <button type="button" class="opt-btn">24</button>
+                <button type="button" class="opt-btn">36</button>
+            </div>
+            <label>Destino</label>
+            <select id="destino">
+                <option>Pagar Deudas</option>
+                <option>Gastos Familiares</option>
+                <option>Negocio</option>
+            </select>
+        </div>
+
+        <div class="form-step" id="step5">
+            <p class="step-info">Paso 5 de 10</p>
+            <h2>¿Dónde vives?</h2>
+            <label>Calle</label>
+            <input type="text" id="calle">
+            <div style="display:flex; gap:10px">
+                <input type="text" placeholder="Num Ext" style="flex:1">
+                <input type="text" placeholder="Num Int" style="flex:1">
+                <input type="text" placeholder="CP" style="flex:1">
+            </div>
+            <label>Tipo de vivienda</label>
+            <div class="options-flex">
+                <button type="button" class="opt-btn">Rentada</button>
+                <button type="button" class="opt-btn">Vivo con familia</button>
+                <button type="button" class="opt-btn">Propia</button>
+            </div>
+        </div>
+
+        <div class="form-step" id="step6">
+            <p class="step-info">Paso 6 de 10</p>
+            <h2>Situación laboral</h2>
+            <label>Ocupación</label>
+            <div class="options-flex">
+                <button type="button" class="opt-btn">Empleado</button>
+                <button type="button" class="opt-btn">Negocio Propio</button>
+            </div>
+            <label>Ingreso mensual comprobable</label>
+            <input type="number" placeholder="$0.00">
+        </div>
+
+        <div class="form-step" id="step7">
+            <p class="step-info">Paso 7 de 10</p>
+            <h2>Referencias</h2>
+            <label>Referencia Familiar 1</label>
+            <input type="text" placeholder="Nombre completo">
+            <input type="text" placeholder="Teléfono">
+            <label>Referencia Personal (No familiar)</label>
+            <input type="text" placeholder="Nombre completo">
+            <input type="text" placeholder="Teléfono">
+        </div>
+
+        <div class="form-step" id="step8">
+            <p class="step-info">Documentación</p>
+            <h2>Sube tu documentación</h2>
+            
+            <div class="doc-card">
+                <p><strong>INE Parte Frontal</strong></p>
+                <button type="button" class="btn-cam" onclick="captureImg('ine_frontal')">
+                    <i class="fas fa-camera"></i> Tomar Foto Frontal
+                </button>
+            </div>
+
+            <div class="doc-card">
+                <p><strong>INE Parte Posterior</strong></p>
+                <button type="button" class="btn-cam" onclick="captureImg('ine_posterior')">
+                    <i class="fas fa-camera"></i> Tomar Foto Posterior
+                </button>
+            </div>
+
+            <div class="doc-card">
+                <p><strong>Comprobante de Domicilio</strong></p>
+                <input type="file" id="pdf_domicilio" accept="application/pdf" style="display:none">
+                <button type="button" class="btn-cam" onclick="document.getElementById('pdf_domicilio').click()" style="background:var(--primary-green)">
+                    <i class="fas fa-file-pdf"></i> Subir PDF Domicilio
+                </button>
+            </div>
+        </div>
+
+        <div class="form-step" id="step9">
+            <p class="step-info">Paso 9 de 10</p>
+            <h2>¿Dónde depositamos?</h2>
+            <label>CLABE Interbancaria (18 dígitos)</label>
+            <input type="text" id="clabe" maxlength="18" placeholder="000 000 000 000 000 000">
+        </div>
+
+        <div class="form-step" id="step10">
+            <p class="step-info">Paso Final</p>
+            <h2>¡Todo listo!</h2>
+            <div class="info-yellow">
+                Al hacer clic en guardar, confirmas que la información proporcionada es verídica y autorizas la consulta de tu historial crediticio.
+            </div>
+            <button type="button" class="btn-next" style="width: 100%;" onclick="finalizar()">Guardar mi perfil</button>
+        </div>
+
+    </form>
+</div>
+
+<div class="nav-buttons">
+    <button type="button" class="btn-nav btn-back" id="btnBack" onclick="changeStep(-1)">Regresar</button>
+    <button type="button" class="btn-nav btn-next" id="btnNext" onclick="changeStep(1)">Continuar</button>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDkzzRJ1Ovt0OelBCnaemMpnaoesnziKn0",
+        authDomain: "prestamas-36107.firebaseapp.com",
+        projectId: "prestamas-36107",
+        storageBucket: "prestamas-36107.firebasestorage.app",
+        messagingSenderId: "664528103707",
+        appId: "1:664528103707:web:0b56c9ea098cf8709e4bbe"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+
+    // Función para "subir" (Simulación por ahora para no saturar storage en pruebas)
+    window.captureImg = function(nombre) {
+        alert("Abriendo cámara para: " + nombre);
+        // Aquí iría la lógica de camera API y uploadBytes
+    }
+</script>
+
+<script>
+    let currentStep = 1;
+    const totalSteps = 10;
+
+    function changeStep(n) {
+        const steps = document.querySelectorAll('.form-step');
+        
+        // Validar límites
+        if (currentStep + n < 1 || currentStep + n > totalSteps) return;
+
+        steps[currentStep - 1].classList.remove('active');
+        currentStep += n;
+        steps[currentStep - 1].classList.add('active');
+
+        // Controlar visibilidad de botones
+        document.getElementById('btnBack').style.visibility = (currentStep === 1) ? 'hidden' : 'visible';
+        document.getElementById('btnNext').style.display = (currentStep === totalSteps) ? 'none' : 'block';
+        
+        window.scrollTo(0,0);
+    }
+
+    function selectOpt(btn, group) {
+        const buttons = btn.parentElement.querySelectorAll('.opt-btn');
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function finalizar() {
+        alert("¡Perfil guardado con éxito! Nuestro equipo revisará tu información.");
+        window.location.href = "inicio.html";
+    }
+
+    // Llenar selects de fecha (simple)
+    for(let i=1; i<=31; i++) document.getElementById('dia').innerHTML += `<option>${i}</option>`;
+    const meses = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+    meses.forEach(m => document.getElementById('mes').innerHTML += `<option>${m}</option>`);
+    for(let i=2008; i>=1950; i--) document.getElementById('anio').innerHTML += `<option>${i}</option>`;
+
+    // Ocultar regresar al inicio
+    document.getElementById('btnBack').style.visibility = 'hidden';
+</script>
+
+</body>
+</html>
