@@ -1,1 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú - PrestaMas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #05C574;
+            --dark-blue: #09384C;
+            --bg-active: #e8f9f1;
+            --text-muted: #888888;
+            --border-color: #e0e0e0;
+        }
 
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-section {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-section img {
+            width: 80%;
+            height: auto;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Rubros / Separadores */
+        .nav-section {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            padding: 20px 20px 10px 20px;
+            letter-spacing: 1px;
+        }
+
+        /* Elementos del menú */
+        .nav-item {
+            margin: 2px 0;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            gap: 12px;
+        }
+
+        .nav-item a i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+
+        /* Hover y Selección */
+        .nav-item a:hover {
+            background-color: #f9f9f9;
+            color: var(--primary-green);
+        }
+
+        .nav-item.active a {
+            background-color: var(--bg-active);
+            color: var(--primary-green);
+            border-left: 4px solid var(--primary-green);
+            font-weight: 600;
+        }
+
+        .nav-item.active a i {
+            color: var(--primary-green);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo-section">
+            <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" alt="Logo PrestaMas">
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item" id="menu-inicio">
+                <a href="inicio.html" target="_parent">
+                    <i class="fas fa-chart-line"></i> Inicio
+                </a>
+            </li>
+
+            <li class="nav-section">Solicitudes</li>
+            <li class="nav-item" id="menu-sol-cli">
+                <a href="solicitudes_cliente.html" target="_parent">
+                    <i class="fas fa-file-invoice-dollar"></i> Solicitudes del cliente
+                </a>
+            </li>
+            <li class="nav-item" id="menu-sol-inv">
+                <a href="solicitudes_inversionista.html" target="_parent">
+                    <i class="fas fa-hand-holding-usd"></i> Solicitudes del inversionista
+                </a>
+            </li>
+
+            <li class="nav-section">Expedientes</li>
+            <li class="nav-item" id="menu-exp-cli">
+                <a href="expedientes_cliente.html" target="_parent">
+                    <i class="fas fa-folder-open"></i> Expedientes del cliente
+                </a>
+            </li>
+            <li class="nav-item" id="menu-exp-inv">
+                <a href="expedientes_inversionista.html" target="_parent">
+                    <i class="fas fa-folder"></i> Expedientes del inversionista
+                </a>
+            </li>
+
+            <li class="nav-section">Clientes</li>
+            <li class="nav-item" id="menu-per-cli">
+                <a href="perfilcliente.html" target="_parent">
+                    <i class="fas fa-user-edit"></i> Perfil del cliente
+                </a>
+            </li>
+            <li class="nav-item" id="menu-per-inv">
+                <a href="perfilinversionista.html" target="_parent">
+                    <i class="fas fa-user-tie"></i> Perfil del inversionista
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDkzzRJ1Ovt0OelBCnaemMpnaoesnziKn0",
+            authDomain: "prestamas-36107.firebaseapp.com",
+            projectId: "prestamas-36107",
+            storageBucket: "prestamas-36107.firebasestorage.app",
+            messagingSenderId: "664528103707",
+            appId: "1:664528103707:web:0b56c9ea098cf8709e4bbe"
+        };
+
+        const app = initializeApp(firebaseConfig);
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Obtener la URL de la página principal (parent)
+            const currentPath = window.parent.location.pathname;
+            
+            // Diccionario para emparejar páginas con IDs de menú
+            const routeMap = {
+                'inicio.html': 'menu-inicio',
+                'solicitudes_cliente.html': 'menu-sol-cli',
+                'solicitudes_inversionista.html': 'menu-sol-inv',
+                'expedientes_cliente.html': 'menu-exp-cli',
+                'expedientes_inversionista.html': 'menu-exp-inv',
+                'perfilcliente.html': 'menu-per-cli',
+                'perfilinversionista.html': 'menu-per-inv'
+            };
+
+            // Recorrer el mapa y añadir la clase active
+            Object.keys(routeMap).forEach(page => {
+                if (currentPath.includes(page)) {
+                    const element = document.getElementById(routeMap[page]);
+                    if (element) element.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
