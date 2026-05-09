@@ -1,1 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expedientes de Inversionistas - PrestaMas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #05C574;
+            --dark-blue: #09384C;
+            --bg-light: #f4f7f6;
+            --text-main: #333333;
+            --border-color: #e0e0e0;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .header-section h1 {
+            margin: 0;
+            color: var(--dark-blue);
+            font-size: 24px;
+        }
+
+        /* Contenedor de la tabla */
+        .table-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-green); /* Verde para diferenciar del cliente */
+            color: #ffffff;
+            padding: 15px 20px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 15px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: #fcfcfc;
+        }
+
+        /* Etiquetas de estado */
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .badge-active { background-color: #e8f9f1; color: var(--primary-green); }
+        .badge-paused { background-color: #fff3cd; color: #856404; }
+
+        .btn-action {
+            background-color: transparent;
+            color: var(--dark-blue);
+            border: 1px solid var(--dark-blue);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+        }
+
+        .btn-action:hover {
+            background-color: var(--dark-blue);
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <h1><i class="fas fa-folder" style="color: var(--primary-green);"></i> Directorio de Inversionistas (Expedientes)</h1>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Inversionista</th>
+                    <th>Nombre Completo</th>
+                    <th>Fecha de Alta</th>
+                    <th>Nivel de Portafolio</th>
+                    <th>Estatus</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>#INV-10045</strong></td>
+                    <td>Roberto Gómez</td>
+                    <td>15/Abr/2026</td>
+                    <td>Platino</td>
+                    <td><span class="badge badge-active">Fondeando</span></td>
+                    <td><button class="btn-action" onclick="window.location.href='perfilinversionista.html'"><i class="fas fa-folder"></i> Ver expediente</button></td>
+                </tr>
+                <tr>
+                    <td><strong>#INV-10046</strong></td>
+                    <td>Ana Sofía Martínez</td>
+                    <td>02/May/2026</td>
+                    <td>Plata</td>
+                    <td><span class="badge badge-active">Fondeando</span></td>
+                    <td><button class="btn-action" onclick="window.location.href='perfilinversionista.html'"><i class="fas fa-folder"></i> Ver expediente</button></td>
+                </tr>
+                <tr>
+                    <td><strong>#INV-10047</strong></td>
+                    <td>Carlos Eduardo Ruíz</td>
+                    <td>07/May/2026</td>
+                    <td>Oro</td>
+                    <td><span class="badge badge-paused">Pausado</span></td>
+                    <td><button class="btn-action" onclick="window.location.href='perfilinversionista.html'"><i class="fas fa-folder"></i> Ver expediente</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Inicialización de Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        
+        // Configuración de tu aplicación web en Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDkzzRJ1Ovt0OelBCnaemMpnaoesnziKn0",
+            authDomain: "prestamas-36107.firebaseapp.com",
+            projectId: "prestamas-36107",
+            storageBucket: "prestamas-36107.firebasestorage.app",
+            messagingSenderId: "664528103707",
+            appId: "1:664528103707:web:0b56c9ea098cf8709e4bbe"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+    </script>
+
+</body>
+</html>
