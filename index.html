@@ -10,7 +10,7 @@
             height: 100%;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #06A05F; /* Tono intermedio exacto */
+            background-color: #06A05F;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -31,7 +31,7 @@
         }
 
         .main-logo {
-            width: 260px; 
+            width: 273px; /* Aumentado un 5% como se solicitó anteriormente */
             height: auto;
             margin-top: 0px; 
             margin-bottom: 15px; 
@@ -105,7 +105,6 @@
             min-height: 15px; 
         }
 
-        /* Estilos base para los tres botones */
         .login-button, .btn-prestamo, .btn-prestar {
             color: #ffffff;
             border: none;
@@ -124,33 +123,30 @@
             gap: 8px; 
         }
 
-        /* Botón Iniciar Sesión */
         .login-button {
-            background-color: #06A05F; /* Mismo color del fondo */
+            background-color: #06A05F; 
         }
         .login-button:hover {
-            background-color: #058A52; /* Verde ligeramente más oscuro al pasar el cursor */
+            background-color: #058A52; 
         }
         .login-button:disabled {
             background-color: #60a889; 
             cursor: not-allowed;
         }
 
-        /* Botón Quiero un préstamo */
         .btn-prestamo {
-            background-color: #09384C; /* Color azul oscuro solicitado */
+            background-color: #09384C; 
         }
         .btn-prestamo:hover {
-            background-color: #062634; /* Azul un poco más oscuro al pasar el cursor */
+            background-color: #062634; 
         }
 
-        /* Botón Quiero prestar */
         .btn-prestar {
-            background-color: #06A05F; /* Mismo color de Iniciar Sesión */
+            background-color: #06A05F; 
             margin-bottom: 0; 
         }
         .btn-prestar:hover {
-            background-color: #058A52; /* Mismo hover de Iniciar Sesión */
+            background-color: #058A52; 
         }
 
         .copyright {
@@ -207,6 +203,23 @@
         © 2026 PRESTAMAS. TODOS LOS DERECHOS RESERVADOS.
     </div>
 
+    <!-- Inicialización de Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDkzzRJ1Ovt0OelBCnaemMpnaoesnziKn0",
+            authDomain: "prestamas-36107.firebaseapp.com",
+            projectId: "prestamas-36107",
+            storageBucket: "prestamas-36107.firebasestorage.app",
+            messagingSenderId: "664528103707",
+            appId: "1:664528103707:web:0b56c9ea098cf8709e4bbe"
+        };
+
+        const app = initializeApp(firebaseConfig);
+    </script>
+
+    <!-- Lógica de Inicio de Sesión con Apps Script -->
     <script>
         const togglePasswordIcon = document.getElementById('togglePasswordIcon');
         const passwordField = document.getElementById('password');
@@ -214,7 +227,6 @@
         togglePasswordIcon.addEventListener('click', function () {
             const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordField.setAttribute('type', type);
-            
             this.classList.toggle('fa-eye');
             this.classList.toggle('fa-eye-slash');
         });
@@ -235,7 +247,8 @@
             btnLogin.disabled = true;
             mensajeDiv.innerText = "";
             
-            var scriptURL = "https://script.google.com/macros/s/AKfycbyQBuAUlC0bc8dYgUHgwbTNOa7ut6dKB_Ls6sqgDbKyHF51zKofE9cQ7rWp_SH2X9k/exec";
+            // Nueva URL proporcionada de Google Apps Script
+            var scriptURL = "https://script.google.com/macros/s/AKfycbxbkYqEG5otbzz3ZtyqRUeFuYEhcElSEuJvkR0wN0XZvDTrP0Xz1shE4YFzxLGm7Kld/exec";
 
             fetch(scriptURL, {
                 method: 'POST',
@@ -249,7 +262,7 @@
                 btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
                 btnLogin.disabled = false;
                 
-            if(respuesta.success) {
+                if(respuesta.success) {
                     mensajeDiv.style.color = "#188038";
                     mensajeDiv.innerText = "¡Bienvenido! Redirigiendo...";
                     
