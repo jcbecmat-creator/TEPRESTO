@@ -3,408 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiero Prestar - Simula tu Inversión | PrestaMas</title>
-    <!-- FontAwesome para iconos -->
+    <title>Simulador de Inversión - PrestaMas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Chart.js para la gráfica -->
+    <!-- Importar Chart.js para la gráfica -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary-green: #05C574;
             --dark-blue: #09384C;
-            --light-green-bg: #f8f9fa;
-            --text-dark: #333333;
-            --text-gray: #666666;
-            --border-color: #cccccc;
-            --gray-bar: #7f8c8d;
+            --bg-light: #f4f7f6;
+            --text-main: #333333;
+            --border-color: #e0e0e0;
         }
 
-        body, html {
-            margin: 0;
-            padding: 0;
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ffffff;
-            color: var(--text-dark);
+            margin: 0;
+            background-color: var(--bg-light);
+            color: var(--text-main);
             display: flex;
             flex-direction: column;
+            align-items: center;
             min-height: 100vh;
         }
 
-        /* Franjas Verdes (Superior e Inferior) */
-        .top-stripe, .bottom-stripe {
-            background-color: var(--primary-green);
-            height: 15px;
+        header {
             width: 100%;
-        }
-
-        .bottom-stripe {
-            margin-top: auto;
-        }
-
-        /* Encabezado */
-        .header {
-            text-align: center;
-            padding: 30px 20px 10px 20px;
-        }
-
-        .main-logo {
-            width: 260px;
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        .welcome-text {
-            font-size: 22px;
-            font-weight: bold;
-            color: #000000;
-        }
-
-        /* Contenedor Principal */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            flex-grow: 1;
-        }
-
-        .calculator-wrapper {
+            background-color: #ffffff;
+            padding: 15px 40px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
-            gap: 50px;
-            align-items: flex-start;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
         }
 
-        /* Panel Izquierdo: Formulario */
-        .form-section {
-            flex: 0.8;
-            padding-top: 20px;
-        }
+        .logo-img { height: 40px; }
 
-        .form-section h1 {
-            font-size: 28px;
-            margin-top: 0;
-            margin-bottom: 30px;
-            color: #1a1a1a;
+        .btn-back {
+            background: transparent;
+            color: var(--dark-blue);
+            border: 1px solid var(--dark-blue);
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
             font-weight: bold;
-            font-family: Georgia, 'Times New Roman', Times, serif; /* Estilo similar a la imagen */
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-back:hover {
+            background: var(--dark-blue);
+            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 40px 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--dark-blue);
+            text-align: center;
+            margin-top: 0;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .controls-section {
+            background-color: #fcfcfc;
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
         }
 
         .input-group label {
             display: block;
-            font-size: 15px;
-            color: var(--text-dark);
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-
-        .input-inline-group {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .input-inline-group input {
-            flex: 1;
-            padding: 16px 20px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 16px;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .input-inline-group input:focus {
-            border-color: var(--primary-green);
-        }
-
-        .btn-simular {
-            background-color: var(--primary-green);
-            color: #ffffff;
-            border: none;
-            padding: 16px 30px;
-            border-radius: 8px;
-            font-size: 16px;
             font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            white-space: nowrap;
-        }
-
-        .btn-simular:hover {
-            background-color: #04A863;
-        }
-
-        /* Panel Derecho: Resultados / Gráfica */
-        .results-section {
-            flex: 1.5;
-            background-color: var(--light-green-bg);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        }
-
-        .results-section h3 {
-            font-size: 22px;
-            color: var(--text-dark);
-            margin-top: 0;
-            margin-bottom: 5px;
-            font-family: Georgia, 'Times New Roman', Times, serif;
-        }
-
-        .results-subtitle {
-            font-size: 13px;
-            color: var(--text-gray);
-            margin-bottom: 20px;
-        }
-
-        /* Contenedor de la Gráfica */
-        .chart-container {
-            position: relative;
-            height: 300px;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        /* Textos inferiores de la gráfica */
-        .legal-links {
-            font-size: 12px;
-            color: #2980b9;
-            text-decoration: none;
+            color: var(--dark-blue);
             margin-bottom: 10px;
-            display: inline-block;
-        }
-        
-        .legal-links:hover {
-            text-decoration: underline;
+            font-size: 15px;
         }
 
-        .disclaimer-text {
-            font-size: 12px;
-            color: #888888;
+        .amount-display {
+            font-size: 32px;
+            color: var(--primary-green);
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--primary-green);
+        }
+
+        .results-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .result-card {
+            flex: 1;
+            background: #e8f9f1;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #c3eadd;
+        }
+
+        .result-card h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
+            text-transform: uppercase;
+        }
+
+        .result-card p {
+            margin: 10px 0 0 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--dark-blue);
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
             margin-bottom: 30px;
         }
 
-        /* Botón de Empezar a Invertir (Enlace al Login) */
-        .btn-empezar {
+        .btn-cta {
             background-color: var(--primary-green);
             color: white;
             border: none;
-            padding: 18px 50px;
-            border-radius: 8px;
+            width: 100%;
+            padding: 15px;
             font-size: 18px;
             font-weight: bold;
+            border-radius: 30px;
             cursor: pointer;
-            display: inline-block;
-            transition: background-color 0.3s;
-            text-decoration: none;
+            transition: all 0.3s;
         }
 
-        .btn-empezar:hover {
-            background-color: #04A863;
+        .btn-cta:hover {
+            opacity: 0.9;
+            box-shadow: 0 4px 10px rgba(5, 197, 116, 0.3);
         }
 
-        /* Responsividad */
-        @media (max-width: 900px) {
-            .calculator-wrapper {
-                flex-direction: column;
-                gap: 30px;
-            }
-            .form-section, .results-section {
-                flex: 1;
-                width: 100%;
-                box-sizing: border-box;
-            }
-            .chart-container {
-                height: 250px;
-            }
-        }
-        
-        @media (max-width: 500px) {
-            .input-inline-group {
-                flex-direction: column;
-            }
-            .btn-simular {
-                width: 100%;
-            }
-            .results-section {
-                padding: 25px 15px;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <!-- Franja Verde Superior -->
-    <div class="top-stripe"></div>
+    <header>
+        <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" class="logo-img" alt="PrestaMas">
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al inicio</a>
+    </header>
 
-    <!-- Encabezado con Logo -->
-    <div class="header">
-        <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" alt="Logo PrestaMas" class="main-logo">
-        <div class="welcome-text">Bienvenido</div>
-    </div>
-
-    <!-- Contenedor Principal -->
     <div class="container">
-        <div class="calculator-wrapper">
-            
-            <!-- FORMULARIO IZQUIERDO -->
-            <div class="form-section">
-                <h1>Simula tu inversión</h1>
-                
-                <div class="input-group">
-                    <label for="montoInversion">¿Cuánto quieres invertir?</label>
-                    <div class="input-inline-group">
-                        <input type="number" id="montoInversion" value="5000" min="1000" step="1000">
-                        <button class="btn-simular" onclick="simularInversion()">Simular</button>
-                    </div>
-                </div>
+        <h1>Simulador de Inversión</h1>
+        <p class="subtitle">Descubre cuánto puede crecer tu dinero invirtiendo en PrestaMas con una tasa estimada del 16% anual.</p>
+
+        <div class="controls-section">
+            <div class="input-group">
+                <label>¿Cuánto dinero quieres invertir?</label>
+                <div class="amount-display" id="montoDisplay">$10,000 MXN</div>
+                <input type="range" id="montoRango" min="1000" max="100000" step="1000" value="10000">
             </div>
-
-            <!-- RESULTADOS DERECHO (Gráfica) -->
-            <div class="results-section">
-                <h3>Rendimiento Anual: 16.52%</h3>
-                <div class="results-subtitle">Rendimiento</div>
-
-                <!-- Contenedor del Canvas para Chart.js -->
-                <div class="chart-container">
-                    <canvas id="rendimientoChart"></canvas>
-                </div>
-
-                <a href="#" class="legal-links">Consideraciones para el cálculo del valor proyectado.</a>
-                <p class="disclaimer-text">Los rendimientos son estimados y no se asegura el resultado de las inversiones.</p>
-
-                <!-- Botón que redirige a inicio de sesión -->
-                <button class="btn-empezar" onclick="window.location.href='index.html'">Empezar a invertir</button>
-            </div>
-            
         </div>
+
+        <div class="results-section">
+            <div class="result-card">
+                <h3>Ganancia Estimada (5 Años)</h3>
+                <p id="gananciaDisplay">$11,003</p>
+            </div>
+            <div class="result-card" style="background-color: #e6f0f5; border-color: #c2d6e0;">
+                <h3>Valor Total de tu Cuenta</h3>
+                <p id="totalDisplay">$21,003</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="investmentChart"></canvas>
+        </div>
+
+        <button class="btn-cta" onclick="window.location.href='perfilinversionista.html'">
+            Crear cuenta y comenzar a invertir
+        </button>
     </div>
 
-    <!-- Franja Verde Inferior -->
-    <div class="bottom-stripe"></div>
-
-    <!-- Script para Lógica y Gráfica -->
+    <!-- Lógica del Simulador y la Gráfica -->
     <script>
-        // Variables globales
-        const ctx = document.getElementById('rendimientoChart').getContext('2d');
-        let chartInstance = null;
-        const TASA_ANUAL = 0.1652; // 16.52%
+        const montoRango = document.getElementById('montoRango');
+        const montoDisplay = document.getElementById('montoDisplay');
+        const gananciaDisplay = document.getElementById('gananciaDisplay');
+        const totalDisplay = document.getElementById('totalDisplay');
+        const ctx = document.getElementById('investmentChart').getContext('2d');
+        
+        let investmentChart;
+        const tasaAnual = 0.16; // 16% estimado
+        const anios = [1, 2, 3, 4, 5];
 
-        // Configuración regional para mostrar pesos (MXN)
-        const formatMXN = new Intl.NumberFormat('es-MX', {
-            style: 'currency',
-            currency: 'MXN',
-            maximumFractionDigits: 0
-        });
+        // Formatear a moneda
+        const formatoMoneda = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 });
 
-        function simularInversion() {
-            let inputMonto = document.getElementById('montoInversion').value;
-            let montoBase = parseFloat(inputMonto);
-
-            if (isNaN(montoBase) || montoBase <= 0) {
-                alert("Por favor, ingresa un monto válido mayor a 0.");
-                return;
+        function calcularInversion(montoInicial) {
+            let valores = [];
+            for (let i = 1; i <= 5; i++) {
+                // Interés compuesto simple
+                let valorFuturo = montoInicial * Math.pow((1 + tasaAnual), i);
+                valores.push(valorFuturo);
             }
+            return valores;
+        }
 
-            // Años a proyectar
-            const anos = [1, 2, 3, 4, 5];
-            const datosInversion = [];
-            const datosTotalRendimiento = [];
+        function actualizarSimulador() {
+            const monto = parseFloat(montoRango.value);
+            montoDisplay.innerText = formatoMoneda.format(monto) + " MXN";
 
-            // Cálculo de interés compuesto para simular la gráfica de la imagen
-            anos.forEach(ano => {
-                // La barra gris siempre representa la inversión inicial
-                datosInversion.push(montoBase);
-                
-                // La barra verde representa el valor total acumulado (Inversión + Rendimiento)
-                let valorTotal = montoBase * Math.pow((1 + TASA_ANUAL), ano);
-                datosTotalRendimiento.push(valorTotal);
-            });
+            const proyecciones = calcularInversion(monto);
+            const valorFinal = proyecciones[4];
+            const ganancia = valorFinal - monto;
 
-            // Si la gráfica ya existe, solo actualizamos sus datos para que se anime
-            if (chartInstance) {
-                chartInstance.data.datasets[0].data = datosInversion;
-                chartInstance.data.datasets[1].data = datosTotalRendimiento;
-                chartInstance.update();
+            gananciaDisplay.innerText = formatoMoneda.format(ganancia);
+            totalDisplay.innerText = formatoMoneda.format(valorFinal);
+
+            actualizarGrafica(monto, proyecciones);
+        }
+
+        function actualizarGrafica(montoInicial, proyecciones) {
+            // Añadir el año 0 para la gráfica
+            const datos = [montoInicial, ...proyecciones];
+            const etiquetas = ['Hoy', 'Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'];
+
+            if (investmentChart) {
+                investmentChart.data.datasets[0].data = datos;
+                investmentChart.update();
             } else {
-                // Crear la gráfica por primera vez
-                chartInstance = new Chart(ctx, {
-                    type: 'bar',
+                investmentChart = new Chart(ctx, {
+                    type: 'line',
                     data: {
-                        labels: ['1 año', '2 años', '3 años', '4 años', '5 años'],
-                        datasets: [
-                            {
-                                label: 'Inversión',
-                                data: datosInversion,
-                                backgroundColor: '#7f8c8d', // Gris
-                                borderRadius: 4,
-                                categoryPercentage: 0.8,
-                                barPercentage: 0.9
-                            },
-                            {
-                                label: '+ Rendimiento',
-                                data: datosTotalRendimiento,
-                                backgroundColor: '#05C574', // Verde PrestaMas
-                                borderRadius: 4,
-                                categoryPercentage: 0.8,
-                                barPercentage: 0.9
-                            }
-                        ]
+                        labels: etiquetas,
+                        datasets: [{
+                            label: 'Crecimiento de Inversión',
+                            data: datos,
+                            borderColor: '#05C574',
+                            backgroundColor: 'rgba(5, 197, 116, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#09384C',
+                            pointRadius: 5
+                        }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        interaction: {
-                            mode: 'index',
-                            intersect: false,
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                border: { display: false },
-                                grid: {
-                                    color: '#e0e0e0',
-                                    drawBorder: false,
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        return value.toLocaleString(); // Separa por comas
-                                    },
-                                    color: '#888',
-                                    font: { size: 11 }
-                                }
-                            },
-                            x: {
-                                grid: { display: false },
-                                ticks: {
-                                    color: '#888',
-                                    font: { size: 12 }
-                                }
-                            }
-                        },
                         plugins: {
-                            legend: {
-                                position: 'top',
-                                labels: {
-                                    usePointStyle: true,
-                                    boxWidth: 8,
-                                    boxHeight: 8,
-                                    color: '#666',
-                                    font: { size: 12 }
-                                }
-                            },
+                            legend: { display: false },
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        let label = context.dataset.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
-                                        if (context.parsed.y !== null) {
-                                            label += formatMXN.format(context.parsed.y);
-                                        }
-                                        return label;
+                                        return formatoMoneda.format(context.raw);
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + value.toLocaleString();
                                     }
                                 }
                             }
@@ -414,10 +304,30 @@
             }
         }
 
-        // Ejecutar simulación inicial al cargar la página
-        window.onload = function() {
-            simularInversion();
-        };
+        // Listeners
+        montoRango.addEventListener('input', actualizarSimulador);
+
+        // Inicializar
+        actualizarSimulador();
     </script>
+
+    <!-- Inicialización de Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        
+        // Configuración de tu aplicación web en Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDkzzRJ1Ovt0OelBCnaemMpnaoesnziKn0",
+            authDomain: "prestamas-36107.firebaseapp.com",
+            projectId: "prestamas-36107",
+            storageBucket: "prestamas-36107.firebasestorage.app",
+            messagingSenderId: "664528103707",
+            appId: "1:664528103707:web:0b56c9ea098cf8709e4bbe"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+    </script>
+
 </body>
 </html>
