@@ -31,7 +31,7 @@
         }
 
         .main-logo {
-            width: 273px; /* Aumentado un 5% como se solicitó anteriormente */
+            width: 273px; /* Tamaño ajustado para evitar desbordes en móviles */
             height: auto;
             margin-top: 0px; 
             margin-bottom: 15px; 
@@ -219,7 +219,7 @@
         const app = initializeApp(firebaseConfig);
     </script>
 
-    <!-- Lógica de Inicio de Sesión con Apps Script -->
+    <!-- Lógica de Inicio de Sesión con Apps Script (Versión Corregida) -->
     <script>
         const togglePasswordIcon = document.getElementById('togglePasswordIcon');
         const passwordField = document.getElementById('password');
@@ -247,7 +247,7 @@
             btnLogin.disabled = true;
             mensajeDiv.innerText = "";
             
-            // Nueva URL proporcionada de Google Apps Script
+            // Reemplaza esta URL por la NUEVA si generaste otra en Apps Script
             var scriptURL = "https://script.google.com/macros/s/AKfycbxbkYqEG5otbzz3ZtyqRUeFuYEhcElSEuJvkR0wN0XZvDTrP0Xz1shE4YFzxLGm7Kld/exec";
 
             fetch(scriptURL, {
@@ -257,33 +257,45 @@
                     'Content-Type': 'text/plain;charset=utf-8'
                 }
             })
-            .then(response => response.json())
-            .then(respuesta => {
-                btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
-                btnLogin.disabled = false;
-                
-                if(respuesta.success) {
-                    mensajeDiv.style.color = "#188038";
-                    mensajeDiv.innerText = "¡Bienvenido! Redirigiendo...";
+            .then(response => response.text()) // Se lee como texto para evitar colapsos
+            .then(text => {
+                try {
+                    // Intenta convertir a JSON
+                    const respuesta = JSON.parse(text);
                     
-                    localStorage.setItem('usuario', user); 
-                    localStorage.setItem('privilegio', respuesta.privilegio);
-                    localStorage.setItem('nombre', respuesta.nombre); 
+                    btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
+                    btnLogin.disabled = false;
                     
-                    setTimeout(() => {
-                        window.location.href = "inicio.html";
-                    }, 1000);
-                } else {
+                    if(respuesta.success) {
+                        mensajeDiv.style.color = "#188038";
+                        mensajeDiv.innerText = "¡Bienvenido! Redirigiendo...";
+                        
+                        localStorage.setItem('usuario', user); 
+                        localStorage.setItem('privilegio', respuesta.privilegio);
+                        localStorage.setItem('nombre', respuesta.nombre); 
+                        
+                        setTimeout(() => {
+                            window.location.href = "inicio.html";
+                        }, 1000);
+                    } else {
+                        mensajeDiv.style.color = "#d93025";
+                        mensajeDiv.innerText = respuesta.mensaje;
+                    }
+                } catch (e) {
+                    // Si cae aquí, Google está bloqueando por permisos
+                    console.error("Respuesta de Google:", text);
+                    btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
+                    btnLogin.disabled = false;
                     mensajeDiv.style.color = "#d93025";
-                    mensajeDiv.innerText = respuesta.mensaje;
+                    mensajeDiv.innerText = "Error de conexión. Revisa los permisos del Script.";
                 }
             })
             .catch(error => {
                 btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
                 btnLogin.disabled = false;
                 mensajeDiv.style.color = "#d93025";
-                mensajeDiv.innerText = "Error de red. Reintenta.";
-                console.error('Error:', error);
+                mensajeDiv.innerText = "Error de red crítico.";
+                console.error('Error de Fetch:', error);
             });
         }
     </script>
