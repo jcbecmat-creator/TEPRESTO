@@ -1,1 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Inversionista - PrestaMas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #05C574;
+            --dark-blue: #09384C;
+            --bg-light: #f8f9fa;
+            --text-main: #1d2d35;
+            --border-color: #d1d9e0;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        header {
+            padding: 15px 40px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 20px;
+        }
+
+        .logo-img { height: 40px; }
+
+        .header-title {
+            font-size: 18px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 20px;
+            color: var(--text-main);
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 0 20px;
+            padding-bottom: 100px;
+        }
+
+        .step-info {
+            text-align: center;
+            color: #6a737d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--dark-blue);
+            font-size: 26px;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .form-step { display: none; }
+        .form-step.active { display: block; animation: fadeIn 0.5s; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--dark-blue);
+        }
+
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        input:focus, select:focus, textarea:focus { 
+            border-color: var(--primary-green); 
+            box-shadow: 0 0 5px rgba(5, 197, 116, 0.2); 
+        }
+
+        .options-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .opt-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .opt-btn.active {
+            border-color: var(--primary-green);
+            background-color: #e8f9f1;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+
+        /* Documentos */
+        .doc-card {
+            border: 1px dashed var(--border-color);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: var(--bg-light);
+        }
+
+        .btn-cam {
+            background-color: var(--dark-blue);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* Navegación Inferior */
+        .nav-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            border-top: 1px solid var(--border-color);
+            z-index: 100;
+        }
+
+        .btn-nav {
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            min-width: 150px;
+        }
+
+        .btn-back { background: transparent; color: var(--primary-green); border: 1px solid var(--primary-green); }
+        .btn-next { background: var(--primary-green); color: white; }
+
+        .info-yellow {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #ffeeba;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" class="logo-img" alt="PrestaMas">
+    <div class="header-title">Crea tu perfil de Inversionista</div>
+</header>
+
+<div class="container">
+    <form id="perfilForm">
+        
+        <!-- PASO 1: NOMBRE -->
+        <div class="form-step active" id="step1">
+            <p class="step-info">Paso 1 de 6</p>
+            <h2>¿Cómo te llamas?</h2>
+            <label>Nombre(s)</label>
+            <input type="text" placeholder="Ej. Juan Carlos">
+            <label>Primer apellido</label>
+            <input type="text" placeholder="Ej. Becerra">
+            <label>Segundo apellido</label>
+            <input type="text" placeholder="Ej. Mata">
+            <label>Género</label>
+            <div class="options-flex">
+                <button type="button" class="opt-btn" onclick="selectOpt(this)">Hombre</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this)">Mujer</button>
+            </div>
+        </div>
+
+        <!-- PASO 2: NACIMIENTO -->
+        <div class="form-step" id="step2">
+            <p class="step-info">Paso 2 de 6</p>
+            <h2>¿Cuándo y dónde naciste?</h2>
+            <label>Fecha de nacimiento</label>
+            <div style="display: flex; gap:10px">
+                <select id="dia"><option>Día</option></select>
+                <select id="mes"><option>Mes</option></select>
+                <select id="anio"><option>Año</option></select>
+            </div>
+            <label>Estado de nacimiento</label>
+            <select id="estado_nac">
+                <option value="">Selecciona el estado</option>
+                <option>MEXICO</option>
+                <option>CIUDAD DE MÉXICO</option>
+                <option>Nací fuera de México</option>
+            </select>
+        </div>
+
+        <!-- PASO 3: SITUACIÓN LABORAL -->
+        <div class="form-step" id="step3">
+            <p class="step-info">Paso 3 de 6</p>
+            <h2>¿Cuál es tu situación laboral?</h2>
+            <label>Ocupación</label>
+            <div class="options-flex">
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'ocupacion')">Empleado</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'ocupacion')">Tengo un negocio</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'ocupacion')">Trabajo por mi cuenta</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'ocupacion')">Jubilado / Pensionado</button>
+            </div>
+            <label>Sector</label>
+            <div class="options-flex">
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'sector')">Servicios</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'sector')">Industrial</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'sector')">Comercio</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'sector')">Agropecuario</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'sector')">Gobierno</button>
+            </div>
+            <label>Actividad principal</label>
+            <select>
+                <option>Selecciona una actividad</option>
+                <option>Funcionario público nacional</option>
+                <option>Empleado de empresa privada</option>
+                <option>Comerciante</option>
+            </select>
+        </div>
+
+        <!-- PASO 4: PLANES DE INVERSIÓN -->
+        <div class="form-step" id="step4">
+            <p class="step-info">Paso 4 de 6</p>
+            <h2>Planes para invertir</h2>
+            <label>¿Cuántas veces al mes piensas agregar fondos?</label>
+            <div class="options-flex">
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'frecuencia')">1 a 2</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'frecuencia')">3 a 8</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'frecuencia')">más de 8</button>
+            </div>
+            <label>Monto de cada depósito</label>
+            <div class="options-flex">
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'monto')">$0 a $10,000</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'monto')">$10,001 a $30,000</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'monto')">Superiores a $30,000</button>
+            </div>
+            <label>¿Cuál es el origen de estos recursos?</label>
+            <div class="options-flex">
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'origen')">Sueldo</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'origen')">Negocio</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'origen')">Herencia</button>
+                <button type="button" class="opt-btn" onclick="selectOpt(this, 'origen')">Otros</button>
+            </div>
+            <label>¿Cuál es tu razón para operar con nosotros?</label>
+            <textarea rows="3" placeholder="Escribe tu razón..."></textarea>
+        </div>
+
+        <!-- PASO 5: DOCUMENTOS -->
+        <div class="form-step" id="step5">
+            <p class="step-info">Paso 5 de 6</p>
+            <h2>Identidad y Domicilio</h2>
+            
+            <div class="doc-card">
+                <p><strong>INE Parte Frontal</strong></p>
+                <button type="button" class="btn-cam" onclick="captureImg('ine_frontal')">
+                    <i class="fas fa-camera"></i> Tomar Foto Frontal
+                </button>
+            </div>
+
+            <div class="doc-card">
+                <p><strong>INE Parte Posterior</strong></p>
+                <button type="button" class="btn-cam" onclick="captureImg('ine_posterior')">
+                    <i class="fas fa-camera"></i> Tomar Foto Posterior
+                </button>
+            </div>
+
+            <div class="doc-card">
+                <p><strong>Comprobante de Domicilio</strong></p>
+                <input type="file" id="pdf_domicilio" accept="application/pdf" style="display:none">
+                <button type="button" class="btn-cam" onclick="document.getElementById('pdf_domicilio').click()" style="background:var(--primary-green)">
+                    <i class="fas fa-file-pdf"></i> Subir PDF Domicilio
+                </button>
+            </div>
+        </div>
+
+        <!-- PASO 6: CONFIRMACIÓN -->
+        <div class="form-step" id="step6">
+            <p class="step-info">Paso Final</p>
+            <h2>¡Todo listo!</h2>
+            <div class="info-yellow">
+                <i class="fas fa-info-circle" style="margin-top: 3px;"></i>
+                <div>Con estos datos crearemos tu cuenta. Si existen discrepancias por ley se debe bloquear tu cuenta.</div>
+            </div>
+            <label style="display: flex; align-items: flex-start; gap: 10px; font-weight: normal; font-size: 15px; color: var(--text-main);">
+                <input type="checkbox" checked style="width: auto; margin-top: 5px;">
+                Confirmo que actúo por cuenta propia y que soy dueño de los recursos y que éstos han sido obtenidos o generados a través de una fuente de origen lícito.
+            </label>
+            <button type="button" class="btn-next" style="width: 100%; margin-top: 30px;" onclick="finalizar()">Sí, guardar mis datos</button>
+        </div>
+
+    </form>
+</div>
+
+<div class="nav-buttons">
+    <button type="button" class="btn-nav btn-back" id="btnBack" onclick="changeStep(-1)">Regresar</button>
+    <button type="button" class="btn-nav btn-next" id="btnNext" onclick="changeStep(1)">Continuar</button>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDkzzRJ1Ovt0OelBCnaemMpnaoesnziKn0",
+        authDomain: "prestamas-36107.firebaseapp.com",
+        projectId: "prestamas-36107",
+        storageBucket: "prestamas-36107.firebasestorage.app",
+        messagingSenderId: "664528103707",
+        appId: "1:664528103707:web:0b56c9ea098cf8709e4bbe"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+
+    // Simulación de captura de cámara
+    window.captureImg = function(nombre) {
+        alert("Abriendo cámara para capturar: " + nombre);
+    }
+</script>
+
+<script>
+    let currentStep = 1;
+    const totalSteps = 6;
+
+    function changeStep(n) {
+        const steps = document.querySelectorAll('.form-step');
+        
+        if (currentStep + n < 1 || currentStep + n > totalSteps) return;
+
+        steps[currentStep - 1].classList.remove('active');
+        currentStep += n;
+        steps[currentStep - 1].classList.add('active');
+
+        document.getElementById('btnBack').style.visibility = (currentStep === 1) ? 'hidden' : 'visible';
+        document.getElementById('btnNext').style.display = (currentStep === totalSteps) ? 'none' : 'block';
+        
+        window.scrollTo(0,0);
+    }
+
+    function selectOpt(btn, groupName) {
+        // Busca los hermanos del botón clickeado para quitarles la clase active
+        const buttons = btn.parentElement.querySelectorAll('.opt-btn');
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function finalizar() {
+        alert("¡Perfil de inversionista guardado con éxito!");
+        window.location.href = "inicio.html";
+    }
+
+    // Llenar selects de fecha
+    for(let i=1; i<=31; i++) document.getElementById('dia').innerHTML += `<option>${i}</option>`;
+    const meses = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+    meses.forEach(m => document.getElementById('mes').innerHTML += `<option>${m}</option>`);
+    for(let i=2008; i>=1940; i--) document.getElementById('anio').innerHTML += `<option>${i}</option>`;
+
+    // Ocultar botón "Regresar" al inicio
+    document.getElementById('btnBack').style.visibility = 'hidden';
+</script>
+
+</body>
+</html>
