@@ -22,10 +22,9 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            scroll-behavior: smooth; /* Para que el scroll sea suave */
+            scroll-behavior: smooth;
         }
 
-        /* Franjas Verdes */
         .top-stripe, .bottom-stripe {
             background-color: var(--primary-green);
             height: 15px;
@@ -107,7 +106,6 @@
             cursor: pointer;
             font-weight: bold;
             transition: 0.3s;
-            /* Evita selección de texto al tocar en móvil */
             user-select: none; 
             -webkit-tap-highlight-color: transparent;
         }
@@ -132,6 +130,59 @@
             margin: 10px 0;
         }
 
+        /* --- NUEVA SECCIÓN DE TABLA COMPARATIVA --- */
+        .comparison-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .comparison-title {
+            text-align: center;
+            color: var(--dark-blue);
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto; /* Permite scroll horizontal en celulares pequeños */
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            min-width: 500px; /* Evita que se aplaste demasiado en móvil */
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eef2f5;
+        }
+
+        .comparison-table th {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            vertical-align: bottom;
+        }
+
+        .row-label {
+            text-align: left;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        .col-mejor { background-color: #e8f9f1; color: #05C574; }
+        .col-promedio { color: #333333; }
+        .col-bancos { color: #e74c3c; }
+
+        .val-mejor { font-size: 18px; font-weight: bold; }
+        .val-promedio { font-size: 18px; font-weight: bold; }
+        .val-bancos { font-size: 18px; font-weight: bold; }
+
         .btn-cta {
             background-color: var(--primary-green);
             color: white;
@@ -143,12 +194,16 @@
             border-radius: 30px;
             cursor: pointer;
             margin-top: 30px;
+            transition: all 0.3s;
         }
+        
+        .btn-cta:hover { background-color: #04A863; }
 
         @media (max-width: 768px) { 
             .calculator-grid { grid-template-columns: 1fr; } 
             header { padding: 15px 20px; }
             .logo-img { height: 30px; }
+            .container { padding: 25px 15px; }
         }
     </style>
 </head>
@@ -189,6 +244,37 @@
             </div>
         </div>
 
+        <div class="comparison-section" id="tablaComparativa">
+            <h2 class="comparison-title">¡Compara las tasas y los pagos mensuales!</h2>
+            
+            <div class="table-responsive">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th class="col-mejor">NUESTRA<br>MEJOR TASA</th>
+                            <th class="col-promedio">NUESTRA<br>TASA PROMEDIO</th>
+                            <th class="col-bancos">TASA DE LOS<br>BANCOS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="row-label">Tasa de interés anual:</td>
+                            <td class="col-mejor val-mejor">8.9%</td>
+                            <td class="col-promedio val-promedio">18.9%</td>
+                            <td class="col-bancos val-bancos">45.0%</td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Pago mensual:</td>
+                            <td class="col-mejor val-mejor" id="pagoMejor">$0</td>
+                            <td class="col-promedio val-promedio" id="pagoPromedioTabla">$0</td>
+                            <td class="col-bancos val-bancos" id="pagoBancos">$0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <button class="btn-cta" onclick="window.location.href='index.html'">Solicitar mi préstamo ahora</button>
     </div>
 
@@ -200,9 +286,19 @@
         const pagoDisplay = document.getElementById('pagoDisplay');
         const botonesMeses = document.querySelectorAll('.month-btn');
 
+        // Referencias a los campos de la tabla
+        const pagoMejorDisplay = document.getElementById('pagoMejor');
+        const pagoPromedioTablaDisplay = document.getElementById('pagoPromedioTabla');
+        const pagoBancosDisplay = document.getElementById('pagoBancos');
+
         let mesesSeleccionados = 24;
-        const tasaAnualPromedio = 0.189;
-        const formatoMoneda = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 });
+        
+        // Tasas Anuales
+        const tasaMejor = 0.089;
+        const tasaPromedio = 0.189;
+        const tasaBancos = 0.450;
+
+        const formatoMoneda = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 2 });
 
         function calcularPagoMensual(principal, tasaAnual, meses) {
             const tasaMensual = tasaAnual / 12;
@@ -211,8 +307,20 @@
 
         function actualizarSimulador() {
             const monto = parseFloat(montoRango.value);
-            montoDisplay.innerText = formatoMoneda.format(monto);
-            pagoDisplay.innerText = formatoMoneda.format(calcularPagoMensual(monto, tasaAnualPromedio, mesesSeleccionados));
+            montoDisplay.innerText = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(monto);
+            
+            // Cálculos
+            const pagoMejorCalc = calcularPagoMensual(monto, tasaMejor, mesesSeleccionados);
+            const pagoPromedioCalc = calcularPagoMensual(monto, tasaPromedio, mesesSeleccionados);
+            const pagoBancosCalc = calcularPagoMensual(monto, tasaBancos, mesesSeleccionados);
+
+            // Mostrar en pantalla principal
+            pagoDisplay.innerText = formatoMoneda.format(pagoPromedioCalc);
+
+            // Mostrar en tabla comparativa
+            pagoMejorDisplay.innerText = formatoMoneda.format(pagoMejorCalc);
+            pagoPromedioTablaDisplay.innerText = formatoMoneda.format(pagoPromedioCalc);
+            pagoBancosDisplay.innerText = formatoMoneda.format(pagoBancosCalc);
         }
 
         botonesMeses.forEach(boton => {
@@ -222,17 +330,17 @@
                 mesesSeleccionados = parseInt(this.getAttribute('data-meses'));
                 actualizarSimulador();
 
-                // Lógica de SCROLL AUTOMÁTICO solo en celulares
+                // Scroll automático en móvil
                 if (window.innerWidth <= 768) {
                     setTimeout(() => {
                         document.getElementById('resultados').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 150); // Pequeño retraso para que se note la actualización del número
+                    }, 150); 
                 }
             });
         });
 
         montoRango.addEventListener('input', actualizarSimulador);
-        actualizarSimulador();
+        actualizarSimulador(); // Iniciar cálculos al abrir
     </script>
 </body>
 </html>
