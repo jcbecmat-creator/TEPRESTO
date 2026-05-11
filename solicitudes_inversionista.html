@@ -3,110 +3,464 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitudes de Inversionistas - PrestaMas</title>
+    <title>Perfil Inversionista - PrestaMas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* MISMOS ESTILOS DEL INVERSIONISTA (VERDE EN EL ENCABEZADO DE TABLA) */
-        :root { --primary-green: #05C574; --dark-blue: #09384C; --bg-light: #f4f7f6; --text-main: #2c3e50; --border-color: #e0e0e0; }
-        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-light); height: 100vh; overflow: hidden; }
-        .app-container { display: flex; height: 100vh; width: 100vw; }
-        .sidebar-wrapper { width: 260px; height: 100vh; background-color: #ffffff; box-shadow: 2px 0 10px rgba(0,0,0,0.05); z-index: 1000; flex-shrink: 0; transition: transform 0.3s ease; }
-        .sidebar-wrapper iframe { width: 100%; height: 100%; border: none; display: block; }
-        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(9, 56, 76, 0.5); z-index: 999; }
-        .main-wrapper { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
-        .top-stripe, .bottom-stripe { background-color: var(--primary-green); height: 12px; width: 100%; flex-shrink: 0; }
-        .mobile-header { display: none; background: #ffffff; padding: 15px 20px; border-bottom: 1px solid var(--border-color); align-items: center; justify-content: space-between; }
-        .mobile-header img { height: 35px; }
-        .hamburger-btn { background: transparent; border: none; font-size: 24px; color: var(--dark-blue); cursor: pointer; }
-        .content-area { padding: 40px; flex-grow: 1; box-sizing: border-box; width: 100%; }
-        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; }
-        .section-title { color: var(--dark-blue); margin: 0; font-size: 24px; }
-        .table-container { background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); overflow-x: auto; width: 100%; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { background-color: var(--primary-green); /* VERDE */ color: #ffffff; padding: 18px 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
-        td { padding: 16px 20px; border-bottom: 1px solid var(--border-color); font-size: 15px; color: var(--text-main); vertical-align: middle; }
-        tr:last-child td { border-bottom: none; }
-        tr:hover { background-color: #fcfcfc; }
-        .badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; }
-        .badge-active { background-color: #e8f9f1; color: var(--primary-green); }
-        .badge-verifying { background-color: #fff3cd; color: #856404; }
-        .btn-action { background-color: transparent; color: var(--dark-blue); border: 1px solid var(--dark-blue); padding: 8px 14px; border-radius: 6px; cursor: pointer; transition: all 0.3s; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
-        .btn-action:hover { background-color: var(--dark-blue); color: #ffffff; }
-        
-        /* FOTO Y MODAL */
-        .thumb-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid var(--border-color); transition: all 0.3s; }
-        .thumb-img:hover { border-color: var(--primary-green); transform: scale(1.1); }
-        .modal { display: none; position: fixed; z-index: 2000; padding-top: 50px; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); }
-        .modal-content { margin: auto; display: block; max-width: 90%; max-height: 85vh; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .close-modal { position: absolute; top: 20px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .close-modal:hover { color: #bbb; }
+        :root {
+            --primary-green: #05C574;
+            --dark-blue: #09384C;
+            --bg-light: #f4f7f6;
+            --text-main: #2c3e50;
+            --border-color: #e0e0e0;
+        }
 
-        @media (max-width: 900px) { .sidebar-wrapper { position: fixed; left: -260px; } .sidebar-wrapper.open { transform: translateX(260px); } .sidebar-overlay.open { display: block; } .mobile-header { display: flex; } .content-area { padding: 20px; } }
+        /* ASEGURANDO QUE EL BODY NO SE DESBORDE NUNCA */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* Contenedor Principal Flex */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* --- MENÚ LATERAL (IFRAME) --- */
+        .sidebar-wrapper {
+            width: 260px;
+            height: 100vh;
+            background-color: #ffffff;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Fondo oscuro para móvil al abrir menú */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(9, 56, 76, 0.5);
+            z-index: 999;
+        }
+
+        /* --- CONTENIDO PRINCIPAL --- */
+        .main-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: relative;
+            width: 100%;
+        }
+
+        /* Franjas Verdes de Marca */
+        .top-stripe, .bottom-stripe {
+            background-color: var(--primary-green);
+            height: 12px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        /* Encabezado Móvil */
+        .mobile-header {
+            display: none;
+            background: #ffffff;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mobile-header img { height: 35px; }
+
+        .hamburger-btn {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            color: var(--dark-blue);
+            cursor: pointer;
+        }
+
+        /* --- ÁREA DE TRABAJO (FORMULARIO) --- */
+        .content-area {
+            padding: 40px 20px;
+            flex-grow: 1;
+            box-sizing: border-box;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-card {
+            background-color: #ffffff;
+            max-width: 650px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 40px;
+            box-sizing: border-box;
+            position: relative;
+            margin-bottom: 80px;
+        }
+
+        .step-info {
+            text-align: center;
+            color: #888888;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--dark-blue);
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        .form-step { display: none; }
+        .form-step.active { display: block; animation: fadeIn 0.4s; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--dark-blue);
+        }
+
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            margin-bottom: 20px;
+            outline: none;
+            background-color: #fcfcfc;
+        }
+
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-green); background-color: #ffffff; }
+
+        .options-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .opt-btn {
+            flex: 1;
+            min-width: 110px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.2s;
+            color: var(--text-main);
+        }
+
+        .opt-btn.active {
+            border-color: var(--primary-green);
+            background-color: #e8f9f1;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+
+        .doc-card {
+            border: 1px dashed #b0c4de;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #f8fafc;
+        }
+
+        .btn-cam {
+            background-color: var(--dark-blue);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .info-yellow {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #ffeeba;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-buttons {
+            position: absolute;
+            bottom: -70px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-nav {
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            min-width: 140px;
+            transition: 0.3s;
+        }
+
+        .btn-back { background: #ffffff; color: var(--dark-blue); border: 1px solid var(--dark-blue); }
+        .btn-next { background: var(--primary-green); color: white; }
+
+        /* CORRECCIÓN FINAL DE RESPONSIVIDAD DEL MENÚ */
+        @media (max-width: 900px) {
+            .sidebar-wrapper { 
+                position: fixed; 
+                left: -260px; /* Oculto completamente fuera de la pantalla */
+            }
+            .sidebar-wrapper.open { transform: translateX(260px); }
+            .sidebar-overlay.open { display: block; }
+            .mobile-header { display: flex; }
+            .content-area { padding: 20px 15px; }
+            .form-card { padding: 25px 20px; }
+        }
     </style>
 </head>
 <body>
 
     <div class="app-container">
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-        <aside class="sidebar-wrapper" id="sidebar"><iframe src="menu.html" title="Menú de Navegación"></iframe></aside>
-        
+
+        <aside class="sidebar-wrapper" id="sidebar">
+            <iframe src="menu.html" title="Menú"></iframe>
+        </aside>
+
         <main class="main-wrapper">
             <div class="top-stripe"></div>
+
             <div class="mobile-header">
                 <button class="hamburger-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-                <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" alt="Logo PrestaMas">
+                <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" alt="Logo">
             </div>
 
             <div class="content-area">
-                <div class="header-section">
-                    <h1 class="section-title"><i class="fas fa-hand-holding-usd" style="color: var(--primary-green);"></i> Solicitudes de Inversiones</h1>
-                </div>
+                <div class="form-card">
+                    <form id="perfilInversionistaForm">
+                        
+                        <div class="form-step active" id="step1">
+                            <p class="step-info">Paso 1 de 6</p>
+                            <h2>¿Cuál es tu nombre?</h2>
+                            <label>Nombre(s)</label>
+                            <input type="text" placeholder="Ej. Juan Carlos">
+                            <label>Apellidos</label>
+                            <input type="text" placeholder="Apellidos completos">
+                            <label>Género</label>
+                            <div class="options-flex">
+                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Hombre</button>
+                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Mujer</button>
+                            </div>
+                        </div>
 
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Foto</th> <th>ID Cuenta</th>
-                                <th>Inversionista</th>
-                                <th>Monto Proyectado</th>
-                                <th>Estado Cuenta</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><img src="https://i.pravatar.cc/150?img=13" class="thumb-img" onclick="abrirModal(this.src)" alt="Foto"></td>
-                                <td><strong>#INV-10045</strong></td>
-                                <td>Roberto Gómez</td>
-                                <td>$10,001 a $30,000</td>
-                                <td><span class="badge badge-active">Verificado</span></td>
-                                <td><button class="btn-action" onclick="window.location.href='perfilinversionista.html'"><i class="fas fa-eye"></i> Ver perfil</button></td>
-                            </tr>
-                            <tr>
-                                <td><img src="https://i.pravatar.cc/150?img=9" class="thumb-img" onclick="abrirModal(this.src)" alt="Foto"></td>
-                                <td><strong>#INV-10046</strong></td>
-                                <td>Ana Sofía Martínez</td>
-                                <td>$0 a $10,000</td>
-                                <td><span class="badge badge-verifying">Validando Origen</span></td>
-                                <td><button class="btn-action" onclick="window.location.href='perfilinversionista.html'"><i class="fas fa-eye"></i> Ver perfil</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        <div class="form-step" id="step2">
+                            <p class="step-info">Paso 2 de 6</p>
+                            <h2>Datos de nacimiento</h2>
+                            <label>Fecha de nacimiento</label>
+                            <div style="display: flex; gap:10px">
+                                <select id="dia"><option>Día</option></select>
+                                <select id="mes"><option>Mes</option></select>
+                                <select id="anio"><option>Año</option></select>
+                            </div>
+                            <label>Entidad federativa de nacimiento</label>
+                            <select>
+                                <option>Selecciona el estado</option>
+                                <option>MEXICO</option>
+                                <option>CIUDAD DE MÉXICO</option>
+                            </select>
+                        </div>
+
+                        <div class="form-step" id="step3">
+                            <p class="step-info">Paso 3 de 6</p>
+                            <h2>Situación laboral</h2>
+                            <label>Ocupación principal</label>
+                            <div class="options-flex">
+                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Empleado</button>
+                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Negocio Propio</button>
+                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Independiente</button>
+                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Pensionado</button>
+                            </div>
+                            <label>Actividad o Sector</label>
+                            <select>
+                                <option>Selecciona un sector</option>
+                                <option>Servicios Financieros</option>
+                                <option>Comercio</option>
+                                <option>Educación / Salud</option>
+                            </select>
+                        </div>
+
+                        <div class="form-step" id="step4">
+                            <p class="step-info">Paso 4 de 6</p>
+                            <h2>Planes de inversión</h2>
+                            <label>Frecuencia estimada de depósitos (al mes)</label>
+                            <div class="options-flex">
+                                <button type="button" class="opt-btn" onclick="selectOpt(this)">1 a 2 veces</button>
+                                <button type="button" class="opt-btn" onclick="selectOpt(this)">3 a 8 veces</button>
+                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Más de 8 veces</button>
+                            </div>
+                            <label>Monto promedio por operación</label>
+                            <div class="options-flex">
+                                <button type="button" class="opt-btn" onclick="selectOpt(this)">$0 - $10,000</button>
+                                <button type="button" class="opt-btn" onclick="selectOpt(this)">$10,001 - $30,000</button>
+                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Más de $30,000</button>
+                            </div>
+                            <label>Origen de los recursos</label>
+                            <select>
+                                <option>Ahorros</option>
+                                <option>Sueldo</option>
+                                <option>Herencia / Venta de activos</option>
+                            </select>
+                        </div>
+
+                        <div class="form-step" id="step5">
+                            <p class="step-info">Paso 5 de 6</p>
+                            <h2>Identificación y Domicilio</h2>
+                            
+                            <div class="doc-card" style="background-color: #e8f9f1; border-color: var(--primary-green);">
+                                <p><strong>Fotografía de Perfil (Selfie)</strong></p>
+                                <p style="font-size: 12px; color: #666;">Tómate una foto clara donde se vea tu rostro completo.</p>
+                                <button type="button" class="btn-cam" onclick="captureImg('selfie')" style="background-color: var(--primary-green);">
+                                    <i class="fas fa-camera"></i> Tomar Selfie
+                                </button>
+                            </div>
+
+                            <div class="doc-card">
+                                <p><strong>INE Frontal</strong></p>
+                                <button type="button" class="btn-cam" onclick="captureImg('frontal')"><i class="fas fa-camera"></i> Tomar Foto</button>
+                            </div>
+                            <div class="doc-card">
+                                <p><strong>Comprobante de Domicilio</strong></p>
+                                <button type="button" class="btn-cam" onclick="document.getElementById('pdf').click()" style="background:var(--primary-green)"><i class="fas fa-file-pdf"></i> Subir PDF</button>
+                                <input type="file" id="pdf" style="display:none" accept="application/pdf">
+                            </div>
+                        </div>
+
+                        <div class="form-step" id="step6">
+                            <p class="step-info">Paso Final</p>
+                            <h2>Declaración Jurada</h2>
+                            <div class="info-yellow">
+                                <i class="fas fa-info-circle"></i>
+                                <div>Confirmo que los recursos invertidos provienen de fuentes lícitas y actúo por cuenta propia.</div>
+                            </div>
+                            <label style="font-weight: normal; font-size: 14px; display: flex; gap: 10px;">
+                                <input type="checkbox" checked style="width: auto; margin: 0;"> Acepto términos y condiciones de inversión.
+                            </label>
+                            <button type="button" class="btn-next" style="width: 100%; margin-top: 30px;" onclick="finalizar()">Confirmar mi perfil</button>
+                        </div>
+                    </form>
+
+                    <div class="nav-buttons">
+                        <button type="button" class="btn-nav btn-back" id="btnBack" onclick="changeStep(-1)">Regresar</button>
+                        <button type="button" class="btn-nav btn-next" id="btnNext" onclick="changeStep(1)" style="margin-left: auto;">Continuar</button>
+                    </div>
                 </div>
             </div>
+
             <div class="bottom-stripe"></div>
         </main>
     </div>
 
-    <div id="fotoModal" class="modal">
-        <span class="close-modal" onclick="cerrarModal()">&times;</span>
-        <img class="modal-content" id="imgAmpliacion">
-    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyDkzzRJ1Ovt0OelBCnaemMpnaoesnziKn0",
+            authDomain: "prestamas-36107.firebaseapp.com",
+            projectId: "prestamas-36107",
+            storageBucket: "prestamas-36107.firebasestorage.app",
+            messagingSenderId: "664528103707",
+            appId: "1:664528103707:web:0b56c9ea098cf8709e4bbe"
+        };
+        initializeApp(firebaseConfig);
+    </script>
 
     <script>
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); }
-        function abrirModal(src) { document.getElementById('fotoModal').style.display = "block"; document.getElementById('imgAmpliacion').src = src; }
-        function cerrarModal() { document.getElementById('fotoModal').style.display = "none"; }
+        let currentStep = 1;
+        const totalSteps = 6;
+
+        function changeStep(n) {
+            const steps = document.querySelectorAll('.form-step');
+            if (currentStep + n < 1 || currentStep + n > totalSteps) return;
+            steps[currentStep - 1].classList.remove('active');
+            currentStep += n;
+            steps[currentStep - 1].classList.add('active');
+            document.getElementById('btnBack').style.visibility = (currentStep === 1) ? 'hidden' : 'visible';
+            document.getElementById('btnNext').style.display = (currentStep === totalSteps) ? 'none' : 'block';
+            document.querySelector('.main-wrapper').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function selectOpt(btn) {
+            btn.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // FUNCIÓN DEL MENÚ MÓVIL
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('open');
+        }
+
+        function finalizar() {
+            alert("Perfil de inversionista actualizado.");
+            window.location.href = "inicio.html";
+        }
+        
+        window.captureImg = function(nombre) {
+            alert("Abriendo cámara para: " + nombre);
+        }
+
+        for(let i=1; i<=31; i++) document.getElementById('dia').innerHTML += `<option>${i}</option>`;
+        const meses = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+        meses.forEach(m => document.getElementById('mes').innerHTML += `<option>${m}</option>`);
+        for(let i=2008; i>=1940; i--) document.getElementById('anio').innerHTML += `<option>${i}</option>`;
+        
+        document.getElementById('btnBack').style.visibility = 'hidden';
     </script>
 </body>
 </html>
