@@ -70,8 +70,8 @@
             box-sizing: border-box;
         }
 
-        h1 { color: var(--dark-blue); text-align: center; margin-top: 0; }
-        .subtitle { text-align: center; color: #666; margin-bottom: 30px; }
+        h1 { color: var(--dark-blue); text-align: center; margin-top: 0; font-size: 28px;}
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 16px;}
 
         .calculator-grid {
             display: grid;
@@ -108,6 +108,7 @@
             transition: 0.3s;
             user-select: none; 
             -webkit-tap-highlight-color: transparent;
+            font-size: 14px;
         }
 
         .month-btn.active { background-color: var(--dark-blue); color: white; }
@@ -123,6 +124,8 @@
             justify-content: center;
         }
 
+        .results-section h3 { font-size: 18px; margin: 0;}
+
         .monthly-payment {
             font-size: 42px;
             font-weight: bold;
@@ -130,7 +133,7 @@
             margin: 10px 0;
         }
 
-        /* --- NUEVA SECCIÓN DE TABLA COMPARATIVA --- */
+        /* --- SECCIÓN DE TABLA COMPARATIVA RESPONSIVA --- */
         .comparison-section {
             margin-top: 40px;
             padding-top: 30px;
@@ -146,14 +149,12 @@
 
         .table-responsive {
             width: 100%;
-            overflow-x: auto; /* Permite scroll horizontal en celulares pequeños */
         }
 
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
             text-align: center;
-            min-width: 500px; /* Evita que se aplaste demasiado en móvil */
         }
 
         .comparison-table th, .comparison-table td {
@@ -167,6 +168,7 @@
             letter-spacing: 1px;
             font-weight: bold;
             vertical-align: bottom;
+            color: #7f8c8d;
         }
 
         .row-label {
@@ -175,13 +177,12 @@
             color: var(--text-main);
         }
 
-        .col-mejor { background-color: #e8f9f1; color: #05C574; }
-        .col-promedio { color: #333333; }
-        .col-bancos { color: #e74c3c; }
+        /* Colores de columnas */
+        .col-mejor { background-color: #e8f9f1; color: #05C574 !important; }
+        .col-promedio { color: var(--dark-blue) !important; }
+        .col-bancos { color: #e74c3c !important; }
 
-        .val-mejor { font-size: 18px; font-weight: bold; }
-        .val-promedio { font-size: 18px; font-weight: bold; }
-        .val-bancos { font-size: 18px; font-weight: bold; }
+        .val-mejor, .val-promedio, .val-bancos { font-size: 18px; font-weight: bold; }
 
         .btn-cta {
             background-color: var(--primary-green);
@@ -195,15 +196,94 @@
             cursor: pointer;
             margin-top: 30px;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
         
         .btn-cta:hover { background-color: #04A863; }
 
+        /* --- MEDIA QUERIES PARA MÓVIL (CORRECCIÓN TABLA CORTADA) --- */
         @media (max-width: 768px) { 
-            .calculator-grid { grid-template-columns: 1fr; } 
+            .calculator-grid { grid-template-columns: 1fr; gap: 20px;} 
             header { padding: 15px 20px; }
             .logo-img { height: 30px; }
-            .container { padding: 25px 15px; }
+            .container { padding: 25px 15px; width: 95%; margin: 20px auto;}
+            h1 { font-size: 22px; }
+            .subtitle { font-size: 14px; margin-bottom: 20px;}
+            .monthly-payment { font-size: 32px; }
+
+            /* REDISEÑO DE TABLA A MODO "STACKED" PARA VERSE COMPLETA */
+            .comparison-table, .comparison-table thead, .comparison-table tbody, .comparison-table th, .comparison-table td, .comparison-table tr {
+                display: block; /* Forzamos a que todo sea un bloque vertical */
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            /* Ocultamos los encabezados reales de la tabla */
+            .comparison-table thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+
+            .comparison-table tr {
+                margin-bottom: 25px;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            }
+
+            .comparison-table td {
+                border: none;
+                border-bottom: 1px solid #eef2f5;
+                position: relative;
+                padding-left: 50% !important; /* Espacio para el sello/etiqueta */
+                text-align: right !important;
+                font-size: 14px;
+            }
+
+            .comparison-table td:last-child {
+                border-bottom: 0;
+            }
+
+            /* Insertamos los encabezados de columna como etiquetas antes de cada dato */
+            .comparison-table td:before {
+                position: absolute;
+                top: 50%;
+                left: 15px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                transform: translateY(-50%);
+                text-align: left;
+                font-weight: bold;
+                color: #7f8c8d;
+                font-size: 12px;
+                text-transform: uppercase;
+            }
+
+            /* Definimos el texto de cada etiqueta basándonos en la laptop */
+            .comparison-table td:nth-of-type(1):before { content: ""; position: static; width: 100%; display: block; text-align: center; padding: 0; margin-bottom: 10px; color: var(--dark-blue); font-size: 14px;} /* Label de fila */
+            .comparison-table td:nth-of-type(2):before { content: "Nuestra Mejor Tasa"; }
+            .comparison-table td:nth-of-type(3):before { content: "Nuestra Tasa Promedio"; }
+            .comparison-table td:nth-of-type(4):before { content: "Tasa de los Bancos"; }
+
+            /* Ajustes especiales para la primera celda (label de fila) */
+            .row-label {
+                padding-left: 15px !important;
+                text-align: center !important;
+                background-color: var(--light-green-bg);
+                border-bottom: 1px solid var(--border-color) !important;
+            }
+
+            /* Colores en móvil aplicado a las celdas stacked */
+            .col-mejor { background-color: #e8f9f1; font-weight: bold;}
+            .col-bancos { background-color: #fff5f5; font-weight: bold;}
+            
+            .val-mejor, .val-promedio, .val-bancos { font-size: 16px; }
         }
     </style>
 </head>
@@ -275,7 +355,9 @@
             </div>
         </div>
 
-        <button class="btn-cta" onclick="window.location.href='index.html'">Solicitar mi préstamo ahora</button>
+        <button class="btn-cta" onclick="window.location.href='index.html'">
+            <i class="fas fa-paper-plane"></i> Solicitar mi préstamo ahora
+        </button>
     </div>
 
     <div class="bottom-stripe"></div>
@@ -286,19 +368,17 @@
         const pagoDisplay = document.getElementById('pagoDisplay');
         const botonesMeses = document.querySelectorAll('.month-btn');
 
-        // Referencias a los campos de la tabla
         const pagoMejorDisplay = document.getElementById('pagoMejor');
         const pagoPromedioTablaDisplay = document.getElementById('pagoPromedioTabla');
         const pagoBancosDisplay = document.getElementById('pagoBancos');
 
         let mesesSeleccionados = 24;
         
-        // Tasas Anuales
         const tasaMejor = 0.089;
         const tasaPromedio = 0.189;
         const tasaBancos = 0.450;
 
-        const formatoMoneda = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 2 });
+        const formatoMoneda = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 });
 
         function calcularPagoMensual(principal, tasaAnual, meses) {
             const tasaMensual = tasaAnual / 12;
@@ -307,17 +387,14 @@
 
         function actualizarSimulador() {
             const monto = parseFloat(montoRango.value);
-            montoDisplay.innerText = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(monto);
+            montoDisplay.innerText = formatoMoneda.format(monto);
             
-            // Cálculos
             const pagoMejorCalc = calcularPagoMensual(monto, tasaMejor, mesesSeleccionados);
             const pagoPromedioCalc = calcularPagoMensual(monto, tasaPromedio, mesesSeleccionados);
             const pagoBancosCalc = calcularPagoMensual(monto, tasaBancos, mesesSeleccionados);
 
-            // Mostrar en pantalla principal
             pagoDisplay.innerText = formatoMoneda.format(pagoPromedioCalc);
 
-            // Mostrar en tabla comparativa
             pagoMejorDisplay.innerText = formatoMoneda.format(pagoMejorCalc);
             pagoPromedioTablaDisplay.innerText = formatoMoneda.format(pagoPromedioCalc);
             pagoBancosDisplay.innerText = formatoMoneda.format(pagoBancosCalc);
@@ -330,7 +407,6 @@
                 mesesSeleccionados = parseInt(this.getAttribute('data-meses'));
                 actualizarSimulador();
 
-                // Scroll automático en móvil
                 if (window.innerWidth <= 768) {
                     setTimeout(() => {
                         document.getElementById('resultados').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -340,7 +416,7 @@
         });
 
         montoRango.addEventListener('input', actualizarSimulador);
-        actualizarSimulador(); // Iniciar cálculos al abrir
+        actualizarSimulador(); 
     </script>
 </body>
 </html>
