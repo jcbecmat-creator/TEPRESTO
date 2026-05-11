@@ -10,16 +10,98 @@
             --primary-green: #05C574;
             --dark-blue: #09384C;
             --bg-light: #f4f7f6;
-            --text-main: #333333;
+            --text-main: #2c3e50;
             --border-color: #e0e0e0;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        body, html {
             margin: 0;
-            padding: 30px;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-light);
-            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Contenedor Principal Flex */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* --- MENÚ LATERAL (IFRAME) --- */
+        .sidebar-wrapper {
+            width: 260px;
+            height: 100vh;
+            background-color: #ffffff;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Fondo oscuro para móvil al abrir menú */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(9, 56, 76, 0.5);
+            z-index: 999;
+        }
+
+        /* --- CONTENIDO PRINCIPAL --- */
+        .main-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Franjas Verdes */
+        .top-stripe, .bottom-stripe {
+            background-color: var(--primary-green);
+            height: 12px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        /* Encabezado Móvil (Oculto en PC) */
+        .mobile-header {
+            display: none;
+            background: #ffffff;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mobile-header img {
+            height: 35px;
+        }
+
+        .hamburger-btn {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            color: var(--dark-blue);
+            cursor: pointer;
+        }
+
+        /* Área de Trabajo */
+        .content-area {
+            padding: 40px;
+            flex-grow: 1;
+            box-sizing: border-box;
+            width: 100%;
         }
 
         .header-section {
@@ -31,18 +113,19 @@
             padding-bottom: 15px;
         }
 
-        .header-section h1 {
-            margin: 0;
+        .section-title {
             color: var(--dark-blue);
+            margin: 0;
             font-size: 24px;
         }
 
-        /* Contenedor de la tabla */
+        /* --- TABLA DE EXPEDIENTES --- */
         .table-container {
             background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
             overflow-x: auto;
+            width: 100%;
         }
 
         table {
@@ -52,27 +135,23 @@
         }
 
         th {
-            background-color: var(--dark-blue); /* Azul oscuro para clientes */
+            background-color: var(--dark-blue);
             color: #ffffff;
-            padding: 15px 20px;
+            padding: 18px 20px;
             font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         td {
-            padding: 15px 20px;
+            padding: 16px 20px;
             border-bottom: 1px solid var(--border-color);
             font-size: 15px;
+            color: var(--text-main);
         }
 
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover {
-            background-color: #fcfcfc;
-        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: #fcfcfc; }
 
         /* Etiquetas de estado */
         .badge {
@@ -85,77 +164,115 @@
 
         .badge-active { background-color: #e8f9f1; color: var(--primary-green); }
         .badge-blocked { background-color: #f8d7da; color: #721c24; }
-        .badge-inactive { background-color: #e2e3e5; color: #383d41; }
 
         .btn-action {
             background-color: transparent;
             color: var(--dark-blue);
             border: 1px solid var(--dark-blue);
-            padding: 6px 12px;
+            padding: 8px 14px;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s;
             font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .btn-action:hover {
             background-color: var(--dark-blue);
             color: #ffffff;
         }
+
+        /* --- RESPONSIVIDAD --- */
+        @media (max-width: 900px) {
+            .sidebar-wrapper {
+                position: fixed;
+                left: -260px;
+            }
+            .sidebar-wrapper.open { transform: translateX(260px); }
+            .sidebar-overlay.open { display: block; }
+            .mobile-header { display: flex; }
+            .content-area { padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="header-section">
-        <h1><i class="fas fa-folder-open" style="color: var(--primary-green);"></i> Directorio de Clientes (Expedientes)</h1>
+    <div class="app-container">
+
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+        <aside class="sidebar-wrapper" id="sidebar">
+            <iframe src="menu.html" title="Menú de Navegación"></iframe>
+        </aside>
+
+        <main class="main-wrapper">
+            <div class="top-stripe"></div>
+
+            <div class="mobile-header">
+                <button class="hamburger-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" alt="Logo PrestaMas">
+            </div>
+
+            <div class="content-area">
+                <div class="header-section">
+                    <h1 class="section-title">
+                        <i class="fas fa-folder-open" style="color: var(--primary-green);"></i> Expedientes de Clientes
+                    </h1>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID Cliente</th>
+                                <th>Nombre Completo</th>
+                                <th>Fecha de Alta</th>
+                                <th>Calificación Crediticia</th>
+                                <th>Estatus</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>#CL-00120</strong></td>
+                                <td>Juan Carlos Becerra</td>
+                                <td>01/May/2026</td>
+                                <td>Excelente (750 pts)</td>
+                                <td><span class="badge badge-active">Activo</span></td>
+                                <td><button class="btn-action" onclick="window.location.href='perfilcliente.html'"><i class="fas fa-folder"></i> Ver expediente</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#CL-00121</strong></td>
+                                <td>María Fernanda López</td>
+                                <td>05/May/2026</td>
+                                <td>Buena (680 pts)</td>
+                                <td><span class="badge badge-active">Activo</span></td>
+                                <td><button class="btn-action" onclick="window.location.href='perfilcliente.html'"><i class="fas fa-folder"></i> Ver expediente</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>#CL-00122</strong></td>
+                                <td>Luis Antonio Pérez</td>
+                                <td>08/May/2026</td>
+                                <td>Regular (540 pts)</td>
+                                <td><span class="badge badge-blocked">Bloqueado</span></td>
+                                <td><button class="btn-action" onclick="window.location.href='perfilcliente.html'"><i class="fas fa-folder"></i> Ver expediente</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bottom-stripe"></div>
+        </main>
     </div>
 
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID Cliente</th>
-                    <th>Nombre Completo</th>
-                    <th>Fecha de Alta</th>
-                    <th>Calificación Crediticia</th>
-                    <th>Estatus</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>#CL-00120</strong></td>
-                    <td>Juan Carlos Becerra</td>
-                    <td>01/May/2026</td>
-                    <td>Excelente (750 pts)</td>
-                    <td><span class="badge badge-active">Activo</span></td>
-                    <td><button class="btn-action" onclick="window.location.href='perfilcliente.html'"><i class="fas fa-folder"></i> Ver expediente</button></td>
-                </tr>
-                <tr>
-                    <td><strong>#CL-00121</strong></td>
-                    <td>María Fernanda López</td>
-                    <td>05/May/2026</td>
-                    <td>Buena (680 pts)</td>
-                    <td><span class="badge badge-active">Activo</span></td>
-                    <td><button class="btn-action" onclick="window.location.href='perfilcliente.html'"><i class="fas fa-folder"></i> Ver expediente</button></td>
-                </tr>
-                <tr>
-                    <td><strong>#CL-00122</strong></td>
-                    <td>Luis Antonio Pérez</td>
-                    <td>08/May/2026</td>
-                    <td>Regular (540 pts)</td>
-                    <td><span class="badge badge-blocked">Bloqueado</span></td>
-                    <td><button class="btn-action" onclick="window.location.href='perfilcliente.html'"><i class="fas fa-folder"></i> Ver expediente</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Inicialización de Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         
-        // Configuración de tu aplicación web en Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDkzzRJ1Ovt0OelBCnaemMpnaoesnziKn0",
             authDomain: "prestamas-36107.firebaseapp.com",
@@ -165,9 +282,14 @@
             appId: "1:664528103707:web:0b56c9ea098cf8709e4bbe"
         };
 
-        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
     </script>
 
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('open');
+        }
+    </script>
 </body>
 </html>
