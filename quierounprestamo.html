@@ -14,26 +14,31 @@
             --border-color: #e0e0e0;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        body, html {
             margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-light);
             color: var(--text-main);
             display: flex;
             flex-direction: column;
-            align-items: center;
             min-height: 100vh;
         }
 
-        header {
+        /* Franjas Verdes */
+        .top-stripe, .bottom-stripe {
+            background-color: var(--primary-green);
+            height: 15px;
             width: 100%;
+        }
+        .bottom-stripe { margin-top: auto; }
+
+        header {
             background-color: #ffffff;
-            padding: 15px 40px;
+            padding: 20px 40px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            box-sizing: border-box;
+            align-items: center;
         }
 
         .logo-img { height: 40px; }
@@ -46,22 +51,18 @@
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
-        .btn-back:hover {
-            background: var(--dark-blue);
-            color: white;
-        }
+        
+        .btn-back:hover { background: var(--dark-blue); color: white; }
 
         .container {
             max-width: 800px;
-            width: 100%;
-            margin: 40px 20px;
+            width: 90%;
+            margin: 40px auto;
             background: #ffffff;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
@@ -69,30 +70,13 @@
             box-sizing: border-box;
         }
 
-        h1 {
-            color: var(--dark-blue);
-            text-align: center;
-            margin-top: 0;
-            font-size: 28px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-        }
+        h1 { color: var(--dark-blue); text-align: center; margin-top: 0; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; }
 
         .calculator-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .calculator-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
         .controls-section {
@@ -100,18 +84,6 @@
             border: 1px solid var(--border-color);
             padding: 25px;
             border-radius: 10px;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-        }
-
-        .input-group label {
-            display: block;
-            font-weight: bold;
-            color: var(--dark-blue);
-            margin-bottom: 10px;
-            font-size: 15px;
         }
 
         .amount-display {
@@ -122,79 +94,38 @@
             margin-bottom: 15px;
         }
 
-        input[type="range"] {
-            width: 100%;
-            accent-color: var(--primary-green);
-            margin-bottom: 10px;
-        }
+        input[type="range"] { width: 100%; accent-color: var(--primary-green); margin-bottom: 20px; }
 
-        .months-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
+        .months-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 
         .month-btn {
-            background-color: white;
             border: 1px solid var(--border-color);
             padding: 10px;
             border-radius: 6px;
             text-align: center;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
+            transition: 0.3s;
         }
 
-        .month-btn.active {
-            background-color: var(--dark-blue);
-            color: white;
-            border-color: var(--dark-blue);
-        }
+        .month-btn.active { background-color: var(--dark-blue); color: white; }
 
         .results-section {
             background-color: var(--dark-blue);
             color: white;
             padding: 30px;
             border-radius: 10px;
+            text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            text-align: center;
-        }
-
-        .results-section h3 {
-            margin: 0 0 10px 0;
-            font-size: 16px;
-            font-weight: normal;
-            color: #a8c1cf;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .monthly-payment {
             font-size: 42px;
             font-weight: bold;
             color: var(--primary-green);
-            margin-bottom: 10px;
-        }
-
-        .payment-note {
-            font-size: 13px;
-            color: #a8c1cf;
-            margin-bottom: 25px;
-        }
-
-        .comparison-box {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 14px;
-        }
-
-        .comparison-box span {
-            color: #ff6b6b;
-            text-decoration: line-through;
-            font-weight: bold;
+            margin: 10px 0;
         }
 
         .btn-cta {
@@ -207,139 +138,86 @@
             font-weight: bold;
             border-radius: 30px;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
-        .btn-cta:hover {
-            background-color: #04a863;
-            box-shadow: 0 4px 15px rgba(5, 197, 116, 0.3);
-        }
-
+        @media (max-width: 768px) { .calculator-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
+    <div class="top-stripe"></div>
+
     <header>
         <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" class="logo-img" alt="PrestaMas">
-        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al inicio</a>
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver</a>
     </header>
 
     <div class="container">
         <h1>Simulador de Préstamos</h1>
-        <p class="subtitle">Descubre tu pago mensual con las mejores tasas del mercado. Sin letras chiquitas.</p>
+        <p class="subtitle">Descubre tu pago mensual sin letras chiquitas.</p>
 
         <div class="calculator-grid">
-            
-            <!-- Controles -->
             <div class="controls-section">
-                <div class="input-group">
-                    <label>¿Cuánto dinero necesitas?</label>
-                    <div class="amount-display" id="montoDisplay">$50,000</div>
-                    <input type="range" id="montoRango" min="5000" max="300000" step="1000" value="50000">
-                </div>
+                <label style="font-weight:bold; color:var(--dark-blue);">¿Cuánto dinero necesitas?</label>
+                <div class="amount-display" id="montoDisplay">$50,000</div>
+                <input type="range" id="montoRango" min="5000" max="300000" step="1000" value="50000">
 
-                <div class="input-group">
-                    <label>¿En cuánto tiempo quieres pagarlo?</label>
-                    <div class="months-grid" id="mesesContenedor">
-                        <div class="month-btn" data-meses="6">6 meses</div>
-                        <div class="month-btn" data-meses="12">12 meses</div>
-                        <div class="month-btn" data-meses="18">18 meses</div>
-                        <div class="month-btn active" data-meses="24">24 meses</div>
-                        <div class="month-btn" data-meses="30">30 meses</div>
-                        <div class="month-btn" data-meses="36">36 meses</div>
-                    </div>
+                <label style="font-weight:bold; color:var(--dark-blue); display:block; margin-bottom:10px;">Plazo a pagar</label>
+                <div class="months-grid">
+                    <div class="month-btn" data-meses="6">6 meses</div>
+                    <div class="month-btn" data-meses="12">12 meses</div>
+                    <div class="month-btn" data-meses="18">18 meses</div>
+                    <div class="month-btn active" data-meses="24">24 meses</div>
+                    <div class="month-btn" data-meses="30">30 meses</div>
+                    <div class="month-btn" data-meses="36">36 meses</div>
                 </div>
             </div>
 
-            <!-- Resultados -->
             <div class="results-section">
                 <h3>Tu pago mensual estimado</h3>
                 <div class="monthly-payment" id="pagoDisplay">$2,538</div>
-                <div class="payment-note">Calculado con una tasa promedio anual del 18.9%*</div>
-
-                <div class="comparison-box">
-                    En un banco tradicional pagarías aprox.<br>
-                    <span id="bancoDisplay">$3,250</span> al mes.
-                </div>
+                <p style="font-size:13px; color:#a8c1cf;">Tasa promedio anual del 18.9%*</p>
             </div>
-
         </div>
 
-        <button class="btn-cta" onclick="window.location.href='perfilcliente.html'">
-            Solicitar mi préstamo ahora
-        </button>
+        <button class="btn-cta" onclick="window.location.href='perfilcliente.html'">Solicitar mi préstamo ahora</button>
     </div>
 
-    <!-- Lógica del Simulador -->
+    <div class="bottom-stripe"></div>
+
     <script>
         const montoRango = document.getElementById('montoRango');
         const montoDisplay = document.getElementById('montoDisplay');
         const pagoDisplay = document.getElementById('pagoDisplay');
-        const bancoDisplay = document.getElementById('bancoDisplay');
         const botonesMeses = document.querySelectorAll('.month-btn');
 
         let mesesSeleccionados = 24;
-        const tasaAnualPromedio = 0.189; // Tasa PrestaMas 18.9%
-        const tasaBancoPromedio = 0.45;  // Tasa banco tradicional 45%
-
+        const tasaAnualPromedio = 0.189;
         const formatoMoneda = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 });
 
-        // Fórmula de amortización: A = P * (r(1+r)^n) / ((1+r)^n - 1)
         function calcularPagoMensual(principal, tasaAnual, meses) {
             const tasaMensual = tasaAnual / 12;
-            const pago = principal * (tasaMensual * Math.pow(1 + tasaMensual, meses)) / (Math.pow(1 + tasaMensual, meses) - 1);
-            return pago;
+            return principal * (tasaMensual * Math.pow(1 + tasaMensual, meses)) / (Math.pow(1 + tasaMensual, meses) - 1);
         }
 
         function actualizarSimulador() {
             const monto = parseFloat(montoRango.value);
             montoDisplay.innerText = formatoMoneda.format(monto);
-
-            const pagoPrestaMas = calcularPagoMensual(monto, tasaAnualPromedio, mesesSeleccionados);
-            const pagoBanco = calcularPagoMensual(monto, tasaBancoPromedio, mesesSeleccionados);
-
-            pagoDisplay.innerText = formatoMoneda.format(pagoPrestaMas);
-            bancoDisplay.innerText = formatoMoneda.format(pagoBanco);
+            pagoDisplay.innerText = formatoMoneda.format(calcularPagoMensual(monto, tasaAnualPromedio, mesesSeleccionados));
         }
 
-        // Listeners para los botones de meses
         botonesMeses.forEach(boton => {
             boton.addEventListener('click', function() {
-                // Quitar clase active a todos
                 botonesMeses.forEach(b => b.classList.remove('active'));
-                // Poner clase active al seleccionado
                 this.classList.add('active');
-                
                 mesesSeleccionados = parseInt(this.getAttribute('data-meses'));
                 actualizarSimulador();
             });
         });
 
-        // Listener para el slider de monto
         montoRango.addEventListener('input', actualizarSimulador);
-
-        // Inicializar el cálculo al abrir
         actualizarSimulador();
     </script>
-
-    <!-- Inicialización de Firebase -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        
-        // Configuración de tu aplicación web en Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDkzzRJ1Ovt0OelBCnaemMpnaoesnziKn0",
-            authDomain: "prestamas-36107.firebaseapp.com",
-            projectId: "prestamas-36107",
-            storageBucket: "prestamas-36107.firebasestorage.app",
-            messagingSenderId: "664528103707",
-            appId: "1:664528103707:web:0b56c9ea098cf8709e4bbe"
-        };
-
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-    </script>
-
 </body>
 </html>
