@@ -96,10 +96,10 @@
             margin-bottom: 12px;
         }
 
-        /* --- CORRECCIÓN LAYOUT INPUT Y BOTÓN --- */
+        /* Input y Botón apilados y del mismo ancho */
         .input-block-group {
             display: flex;
-            flex-direction: column; /* Apilados verticalmente */
+            flex-direction: column;
             gap: 15px;
         }
 
@@ -108,35 +108,26 @@
             padding: 16px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-green);
             outline: none;
             box-sizing: border-box;
         }
 
         .input-block-group input:focus { border-color: var(--primary-green); }
 
-        /* Estilo para mostrar la moneda formateada debajo del input */
-        .currency-formatted-display {
-            font-size: 18px;
-            color: var(--primary-green);
-            font-weight: bold;
-            margin-top: -5px;
-            margin-bottom: 5px;
-            min-height: 22px; /* Mantiene el espacio si está vacío */
-        }
-
-        /* Botón simular igual al CTA */
         .btn-simular {
             background-color: var(--primary-green);
             color: #ffffff;
             border: none;
             padding: 18px;
-            border-radius: 30px; /* Redondeado igual al otro */
+            border-radius: 30px; 
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
-            width: 100%; /* Ancho completo */
+            width: 100%; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -164,7 +155,7 @@
             color: white;
             border: none;
             padding: 18px 50px;
-            border-radius: 30px; /* Unificado */
+            border-radius: 30px; 
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
@@ -174,7 +165,7 @@
             justify-content: center;
             gap: 10px;
             margin-top: 20px;
-            width: 100%; /* Unificado */
+            width: 100%; 
             box-sizing: border-box;
         }
         .btn-empezar:hover { background-color: #04A863; }
@@ -212,25 +203,21 @@
         .bg-purple-icon { background-color: #5e468c; }
         .bg-teal-icon { background-color: #0d7a81; }
 
-        /* --- NUEVA SECCIÓN LEYENDA FINAL (Imagen 4) --- */
+        /* Leyenda sin recuadro */
         .final-legend-section {
-            margin-top: 60px;
-            padding: 30px;
-            background-color: var(--light-green-bg);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            font-size: 13px;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 12px;
             color: #666;
             line-height: 1.6;
             text-align: justify;
         }
 
         .final-legend-section p { margin: 0 0 15px 0; }
-        .final-legend-section p:last-child { margin-bottom: 0; }
+        
         .contact-info-block {
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
+            margin-top: 15px;
             font-weight: bold;
             color: var(--dark-blue);
             text-align: center;
@@ -244,7 +231,6 @@
             .results-section { padding: 25px 15px; }
             .chart-container { height: 250px; }
             .features-section { grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 40px; }
-            .final-legend-section { padding: 20px; margin-top: 40px;}
         }
 
         @media (max-width: 600px) {
@@ -259,7 +245,8 @@
     <div class="header">
         <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" alt="Logo PrestaMas" class="main-logo">
         <a href="index.html" class="btn-back">
-            <i class="fas fa-arrow-left"></i> Volver </a>
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
     </div>
 
     <div class="container">
@@ -268,10 +255,12 @@
                 <h1>Simula tu inversión</h1>
                 <div class="input-group">
                     <label>¿Cuánto quieres invertir?</label>
-                    <div class="input-block-group"> <input type="number" id="montoInversion" value="5000" min="1000" step="1000" placeholder="Ej. 10000">
-                        <div class="currency-formatted-display" id="montoFormateado">$5,000.00</div> 
+                    <div class="input-block-group">
+                        <input type="text" id="montoInversion" value="5000">
+                        
                         <button class="btn-simular" onclick="simularInversion()">
-                            <i class="fas fa-calculator"></i> Simular </button>
+                            <i class="fas fa-calculator"></i> Simular
+                        </button>
                     </div>
                 </div>
             </div>
@@ -282,35 +271,32 @@
                     <canvas id="rendimientoChart"></canvas>
                 </div>
                 <a href="index.html" class="btn-empezar">
-                    <i class="fas fa-rocket"></i> Empezar a invertir </a>
+                    <i class="fas fa-rocket"></i> Empezar a invertir
+                </a>
             </div>
         </div>
 
         <div class="features-section">
             <div class="feature-box">
-                <div class="feature-icon bg-green-icon">
-                    <i class="fas fa-chart-line"></i> </div>
+                <div class="feature-icon bg-green-icon"><i class="fas fa-chart-line"></i></div>
                 <h4>Buenos rendimientos</h4>
                 <p>Puedes ganar con tasas de hasta 38.90% anual.</p>
             </div>
             
             <div class="feature-box">
-                <div class="feature-icon bg-blue-icon">
-                    <i class="fas fa-hand-holding-dollar"></i> </div>
+                <div class="feature-icon bg-blue-icon"><i class="fas fa-hand-holding-dollar"></i></div>
                 <h4>Accesible</h4>
                 <p>Puedes invertir desde $200, sólo necesitas una cuenta bancaria e internet.</p>
             </div>
             
             <div class="feature-box">
-                <div class="feature-icon bg-purple-icon">
-                    <i class="fas fa-eye"></i> </div>
+                <div class="feature-icon bg-purple-icon"><i class="fas fa-eye"></i></div>
                 <h4>Transparente</h4>
                 <p>Sabes exactamente el destino, plazo, retorno y riesgo de tu inversión.</p>
             </div>
 
             <div class="feature-box">
-                <div class="feature-icon bg-teal-icon">
-                    <i class="fas fa-mobile-screen-button"></i> </div>
+                <div class="feature-icon bg-teal-icon"><i class="fas fa-mobile-screen-button"></i></div>
                 <h4>Sencillo</h4>
                 <p>Todo por internet y sin necesidad de ser un experto en finanzas.</p>
             </div>
@@ -331,25 +317,30 @@
     <script>
         const ctx = document.getElementById('rendimientoChart').getContext('2d');
         const montoInput = document.getElementById('montoInversion');
-        const montoFormateadoDisplay = document.getElementById('montoFormateado');
         let chartInstance = null;
         const TASA_ANUAL = 0.1652;
 
-        // Formateador de moneda completo ($1,000.00)
-        const formatterFull = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-        // Actualizar visualización de moneda mientras se escribe
-        montoInput.addEventListener('input', function() {
-            let val = parseFloat(this.value);
-            if (!isNaN(val) && val >= 0) {
-                montoFormateadoDisplay.innerText = formatterFull.format(val);
-            } else {
-                montoFormateadoDisplay.innerText = "$0.00";
+        // Función para formatear automáticamente mientras el usuario escribe
+        function formatCurrencyInput(input) {
+            let value = input.value.replace(/\D/g, ''); // Deja solo números
+            if (!value) {
+                input.value = '';
+                return;
             }
+            let number = parseInt(value, 10);
+            input.value = '$' + number.toLocaleString('en-US') + '.00';
+        }
+
+        montoInput.addEventListener('input', function() {
+            formatCurrencyInput(this);
         });
 
         function simularInversion() {
-            let montoBase = parseFloat(montoInput.value);
+            // Extrae solo los números (ej. "$5,000.00" -> 500000) y lo divide entre 100 para obtener el valor real (5000)
+            let rawValue = montoInput.value.replace(/[^0-9]/g, '');
+            if (!rawValue) return alert("Ingresa un monto válido");
+            let montoBase = parseInt(rawValue, 10) / 100;
+
             if (isNaN(montoBase) || montoBase <= 0) return alert("Ingresa un monto válido");
 
             const anos = [1, 2, 3, 4, 5];
@@ -379,8 +370,9 @@
                 });
             }
         }
-        // Iniciar con formato correcto y simulación
-        montoFormateadoDisplay.innerText = formatterFull.format(parseFloat(montoInput.value));
+        
+        // Dar formato inicial al cargar
+        formatCurrencyInput(montoInput);
         window.onload = simularInversion;
     </script>
 </body>
