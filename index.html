@@ -122,7 +122,6 @@
             gap: 8px; 
         }
 
-        /* Estilos del botón de Iniciar sesión (Verde) */
         .login-button {
             background-color: #06A05F; 
             color: #ffffff;
@@ -135,14 +134,13 @@
             cursor: not-allowed;
         }
 
-        /* Novedad: Estilos para el separador "o continúa como" */
         .continue-as {
             display: flex;
             align-items: center;
             text-align: center;
             color: #888888;
             font-size: 14px;
-            margin: 15px 0; /* Espaciado */
+            margin: 15px 0; 
         }
         .continue-as::before, .continue-as::after {
             content: '';
@@ -150,20 +148,19 @@
             border-bottom: 1px solid #cccccc;
         }
         .continue-as span {
-            padding: 0 10px; /* Espacio para el texto */
+            padding: 0 10px; 
         }
 
-        /* Novedad: Estilos para los botones inferiores (Blancos con verde) */
         .btn-prestamo, .btn-prestar {
-            background-color: #ffffff; /* Fondo blanco */
-            color: #06A05F; /* Texto verde de la marca */
-            border: 1px solid #06A05F; /* Borde verde */
+            background-color: #ffffff; 
+            color: #06A05F; 
+            border: 1px solid #06A05F; 
             margin-bottom: 12px; 
         }
 
         .btn-prestamo:hover, .btn-prestar:hover {
-            background-color: #e8f9f1; /* Verde muy suave al pasar el ratón */
-            color: #058A52; /* Verde más oscuro de la marca */
+            background-color: #e8f9f1; 
+            color: #058A52; 
             border-color: #058A52;
         }
 
@@ -217,10 +214,12 @@
         </div>
 
         <button type="button" class="btn-prestamo" onclick="window.location.href='quierounprestamo.html'">
-            <i class="fas fa-house-user"></i> Quiero un préstamo </button>
+            <i class="fas fa-house-user"></i> Quiero un préstamo
+        </button>
         
         <button type="button" class="btn-prestar" onclick="window.location.href='quieroprestar.html'">
-            <i class="fas fa-building-columns"></i> Quiero prestar </button>
+            <i class="fas fa-building-columns"></i> Quiero prestar
+        </button>
     </div>
 
     <div class="copyright">
@@ -269,7 +268,6 @@
             btnLogin.disabled = true;
             mensajeDiv.innerText = "";
             
-            // Nueva URL proporcionada de Google Apps Script (sin cambios)
             var scriptURL = "https://script.google.com/macros/s/AKfycbxbkYqEG5otbzz3ZtyqRUeFuYEhcElSEuJvkR0wN0XZvDTrP0Xz1shE4YFzxLGm7Kld/exec";
 
             fetch(scriptURL, {
@@ -279,33 +277,43 @@
                     'Content-Type': 'text/plain;charset=utf-8'
                 }
             })
-            .then(response => response.json())
-            .then(respuesta => {
-                btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
-                btnLogin.disabled = false;
-                
-                if(respuesta.success) {
-                    mensajeDiv.style.color = "#188038";
-                    mensajeDiv.innerText = "¡Bienvenido! Redirigiendo...";
+            .then(response => response.text()) 
+            .then(text => {
+                try {
+                    const respuesta = JSON.parse(text);
                     
-                    localStorage.setItem('usuario', user); 
-                    localStorage.setItem('privilegio', respuesta.privilegio);
-                    localStorage.setItem('nombre', respuesta.nombre); 
+                    btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
+                    btnLogin.disabled = false;
                     
-                    setTimeout(() => {
-                        window.location.href = "inicio.html";
-                    }, 1000);
-                } else {
+                    if(respuesta.success) {
+                        mensajeDiv.style.color = "#188038";
+                        mensajeDiv.innerText = "¡Bienvenido! Redirigiendo...";
+                        
+                        localStorage.setItem('usuario', user); 
+                        localStorage.setItem('privilegio', respuesta.privilegio);
+                        localStorage.setItem('nombre', respuesta.nombre); 
+                        
+                        setTimeout(() => {
+                            window.location.href = "inicio.html";
+                        }, 1000);
+                    } else {
+                        mensajeDiv.style.color = "#d93025";
+                        mensajeDiv.innerText = respuesta.mensaje;
+                    }
+                } catch (e) {
+                    console.error("Respuesta de Google:", text);
+                    btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
+                    btnLogin.disabled = false;
                     mensajeDiv.style.color = "#d93025";
-                    mensajeDiv.innerText = respuesta.mensaje;
+                    mensajeDiv.innerText = "Error de conexión. Revisa los permisos del Script.";
                 }
             })
             .catch(error => {
                 btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
                 btnLogin.disabled = false;
                 mensajeDiv.style.color = "#d93025";
-                mensajeDiv.innerText = "Error de red. Reintenta.";
-                console.error('Error:', error);
+                mensajeDiv.innerText = "Error de red crítico.";
+                console.error('Error de Fetch:', error);
             });
         }
     </script>
