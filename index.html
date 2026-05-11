@@ -3,338 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - PrestaMas</title>
+    <title>Inicio de Sesión - PrestaMas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            --primary-green: #05C574;
-            --dark-blue: #09384C;
-            --bg-light: #f4f7f6;
-            --text-main: #2c3e50;
-            --border-color: #e0e0e0;
-        }
-
         body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-light);
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Contenedor Principal Flex */
-        .app-container {
-            display: flex;
-            height: 100vh;
-            width: 100vw;
-        }
-
-        /* --- MENÚ LATERAL (IFRAME) --- */
-        .sidebar-wrapper {
-            width: 260px;
-            height: 100vh;
-            background-color: #ffffff;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-            z-index: 1000;
-            flex-shrink: 0;
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar-wrapper iframe {
-            width: 100%;
             height: 100%;
-            border: none;
-            display: block;
-        }
-
-        /* Fondo oscuro para móvil al abrir menú */
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(9, 56, 76, 0.5);
-            z-index: 999;
-        }
-
-        /* --- CONTENIDO PRINCIPAL --- */
-        .main-wrapper {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        /* Franjas Verdes */
-        .top-stripe, .bottom-stripe {
-            background-color: var(--primary-green);
-            height: 12px;
-            width: 100%;
-            flex-shrink: 0;
-        }
-
-        /* Encabezado Móvil (Oculto en PC) */
-        .mobile-header {
-            display: none;
-            background: #ffffff;
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--border-color);
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .mobile-header img {
-            height: 35px;
-        }
-
-        .hamburger-btn {
-            background: transparent;
-            border: none;
-            font-size: 24px;
-            color: var(--dark-blue);
-            cursor: pointer;
-        }
-
-        /* Encabezado PC */
-        .page-header {
-            background-color: #ffffff;
-            padding: 25px 40px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .welcome-message {
-            font-size: 22px;
-            color: var(--text-main);
-            font-weight: 600;
             margin: 0;
-        }
-
-        .welcome-message span {
-            color: var(--primary-green);
-        }
-
-        /* Área de Trabajo (Dashboard expandido) */
-        .content-area {
-            padding: 40px;
-            flex-grow: 1;
-            box-sizing: border-box;
-            width: 100%;
-        }
-
-        .section-title {
-            color: var(--dark-blue);
-            margin-top: 0;
-            margin-bottom: 30px;
-            font-size: 24px;
-        }
-
-        /* KPIs (Tarjetas a todo lo ancho) */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-            width: 100%;
-        }
-
-        .kpi-card {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            border-left: 5px solid var(--primary-green);
-        }
-
-        .kpi-card.blue-border { border-left-color: var(--dark-blue); }
-
-        .kpi-icon {
-            width: 60px;
-            height: 60px;
-            background-color: #f4f7f6;
-            color: var(--primary-green);
-            border-radius: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #06A05F;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
-        }
-
-        .kpi-card.blue-border .kpi-icon { color: var(--dark-blue); }
-
-        .kpi-info h3 { margin: 0; font-size: 32px; color: var(--text-main); }
-        .kpi-info p { margin: 5px 0 0 0; font-size: 15px; color: #666; font-weight: 500;}
-
-        /* --- NUEVO: SECCIÓN DE GRÁFICAS --- */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr; /* Líneas más ancha, pastel más delgada */
-            gap: 25px;
-            margin-bottom: 40px;
-            width: 100%;
-        }
-
-        .chart-card {
-            background-color: #ffffff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            display: flex;
             flex-direction: column;
-        }
-
-        .chart-card h3 {
-            margin-top: 0;
-            color: var(--dark-blue);
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .canvas-container {
-            position: relative;
-            height: 280px;
-            width: 100%;
-        }
-
-        /* Accesos Rápidos */
-        .quick-actions {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            width: 100%;
+            padding: 21px 12px 12px 12px; 
             box-sizing: border-box;
-            margin-bottom: 40px;
         }
 
-        .action-buttons { display: flex; gap: 20px; flex-wrap: wrap; }
+        .login-box {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 25px 25px 30px 25px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%; 
+            max-width: 550px; 
+            text-align: center;
+            box-sizing: border-box;
+        }
 
-        .btn-action {
-            background-color: var(--primary-green);
-            color: #ffffff;
-            border: none;
-            padding: 16px 30px;
+        .main-logo {
+            width: 273px; 
+            height: auto;
+            margin-top: 0px; 
+            margin-bottom: 15px; 
+        }
+
+        .slogan-text {
+            font-size: 16px; 
+            color: #333333;
+            margin-bottom: 25px; 
+        }
+
+        .welcome-text {
+            font-size: 22px; 
+            color: #000000; 
+            font-weight: bold; 
+            margin-bottom: 25px; 
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 6px; 
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px; 
+            color: #000000; 
+            margin-bottom: 8px; 
+            font-weight: 600;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 18px 16px 18px 45px; 
+            border: 1px solid #cccccc;
             border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 15px; 
+            background-color: #f9f9f9;
+        }
+
+        .input-group .field-icon {
+            position: absolute;
+            left: 14px; 
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 16px; 
+        }
+
+        .input-group .toggle-password {
+            position: absolute;
+            right: 14px; 
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            cursor: pointer;
+            font-size: 16px; 
+        }
+
+        #mensaje {
+            margin-bottom: 4px; 
+            margin-top: 0;
+            font-size: 13px; 
+            font-weight: bold;
+            min-height: 15px; 
+        }
+
+        .login-button, .btn-prestamo, .btn-prestar {
+            border: none;
+            padding: 15px; 
+            border-radius: 6px;
+            font-size: 15px; 
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
+            width: 100%;
+            margin-top: 0;
+            margin-bottom: 12px; 
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            font-size: 15px;
+            gap: 8px; 
         }
 
-        .btn-action.blue { background-color: var(--dark-blue); }
-        .btn-action:hover { opacity: 0.9; }
-
-        /* --- RESPONSIVIDAD (MÓVIL Y TABLET) --- */
-        @media (max-width: 1100px) {
-            .charts-grid { grid-template-columns: 1fr; } /* Gráficas apiladas en pantallas pequeñas */
+        /* Estilos del botón de Iniciar sesión (Verde) */
+        .login-button {
+            background-color: #06A05F; 
+            color: #ffffff;
+        }
+        .login-button:hover {
+            background-color: #058A52; 
+        }
+        .login-button:disabled {
+            background-color: #60a889; 
+            cursor: not-allowed;
         }
 
-        @media (max-width: 900px) {
-            .sidebar-wrapper { position: fixed; left: -260px; }
-            .sidebar-wrapper.open { transform: translateX(260px); }
-            .sidebar-overlay.open { display: block; }
-            .mobile-header { display: flex; }
-            .content-area { padding: 20px; }
-            .page-header { padding: 20px; }
+        /* Novedad: Estilos para el separador "o continúa como" */
+        .continue-as {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #888888;
+            font-size: 14px;
+            margin: 15px 0; /* Espaciado */
+        }
+        .continue-as::before, .continue-as::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #cccccc;
+        }
+        .continue-as span {
+            padding: 0 10px; /* Espacio para el texto */
+        }
+
+        /* Novedad: Estilos para los botones inferiores (Blancos con verde) */
+        .btn-prestamo, .btn-prestar {
+            background-color: #ffffff; /* Fondo blanco */
+            color: #06A05F; /* Texto verde de la marca */
+            border: 1px solid #06A05F; /* Borde verde */
+            margin-bottom: 12px; 
+        }
+
+        .btn-prestamo:hover, .btn-prestar:hover {
+            background-color: #e8f9f1; /* Verde muy suave al pasar el ratón */
+            color: #058A52; /* Verde más oscuro de la marca */
+            border-color: #058A52;
+        }
+
+        .btn-prestar {
+            margin-bottom: 0; 
+        }
+
+        .copyright {
+            font-size: 10px; 
+            color: #ffffff;
+            margin-top: 15px; 
+            text-align: center;
+            letter-spacing: 0.5px;
         }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
+    <div class="login-box">
+        <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" alt="Logo PrestaMas" class="main-logo">
+        
+        <div class="slogan-text">Préstamos ágiles para ti</div>
+        
+        <div class="welcome-text">Bienvenido</div>
 
-        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-
-        <aside class="sidebar-wrapper" id="sidebar">
-            <iframe src="menu.html" title="Menú de Navegación"></iframe>
-        </aside>
-
-        <main class="main-wrapper">
-            <div class="top-stripe"></div>
-
-            <div class="mobile-header">
-                <button class="hamburger-btn" onclick="toggleSidebar()">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" alt="Logo PrestaMas">
+        <div class="input-group">
+            <label for="username">Usuario</label>
+            <div class="input-wrapper">
+                <i class="fas fa-id-badge field-icon"></i>
+                <input type="text" id="username" placeholder="ID de Usuario">
             </div>
+        </div>
 
-            <header class="page-header">
-                <h1 class="welcome-message">Bienvenido, <span id="nombreUsuario">Usuario</span></h1>
-            </header>
-
-            <div class="content-area">
-                <h2 class="section-title">Resumen de Actividad</h2>
-
-                <div class="kpi-grid">
-                    <div class="kpi-card">
-                        <div class="kpi-icon"><i class="fas fa-file-invoice-dollar"></i></div>
-                        <div class="kpi-info">
-                            <h3>14</h3>
-                            <p>Créditos Solicitados</p>
-                        </div>
-                    </div>
-
-                    <div class="kpi-card blue-border">
-                        <div class="kpi-icon"><i class="fas fa-hand-holding-usd"></i></div>
-                        <div class="kpi-info">
-                            <h3>8</h3>
-                            <p>Inversiones Activas</p>
-                        </div>
-                    </div>
-
-                    <div class="kpi-card">
-                        <div class="kpi-icon"><i class="fas fa-check-circle"></i></div>
-                        <div class="kpi-info">
-                            <h3>24</h3>
-                            <p>Expedientes Aprobados</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="charts-grid">
-                    <div class="chart-card">
-                        <h3>Evolución de Solicitudes (Últimos 6 meses)</h3>
-                        <div class="canvas-container">
-                            <canvas id="lineChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="chart-card">
-                        <h3>Estado de la Cartera</h3>
-                        <div class="canvas-container">
-                            <canvas id="doughnutChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="quick-actions">
-                    <h2 class="section-title" style="font-size: 18px; margin-bottom: 20px;">Accesos Rápidos</h2>
-                    <div class="action-buttons">
-                        <a href="solicitudes_cliente.html" class="btn-action blue">
-                            <i class="fas fa-search-dollar"></i> Revisar Créditos
-                        </a>
-                        <a href="solicitudes_inversionista.html" class="btn-action">
-                            <i class="fas fa-users"></i> Revisar Inversiones
-                        </a>
-                    </div>
-                </div>
+        <div class="input-group">
+            <label for="password">Contraseña</label>
+            <div class="input-wrapper">
+                <i class="fas fa-lock field-icon"></i>
+                <input type="password" id="password" placeholder="••••••••">
+                <i class="fas fa-eye toggle-password" id="togglePasswordIcon"></i>
             </div>
+        </div>
 
-            <div class="bottom-stripe"></div>
-        </main>
+        <div id="mensaje"></div>
+
+        <button type="button" class="login-button" id="btn-login" onclick="iniciarSesion()">
+            <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+        </button>
+        
+        <div class="continue-as">
+            <span>o continúa como</span>
+        </div>
+
+        <button type="button" class="btn-prestamo" onclick="window.location.href='quierounprestamo.html'">
+            <i class="fas fa-house-user"></i> Quiero un préstamo </button>
+        
+        <button type="button" class="btn-prestar" onclick="window.location.href='quieroprestar.html'">
+            <i class="fas fa-building-columns"></i> Quiero prestar </button>
+    </div>
+
+    <div class="copyright">
+        © 2026 PRESTAMAS. TODOS LOS DERECHOS RESERVADOS.
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        
         const firebaseConfig = {
             apiKey: "AIzaSyDkzzRJ1Ovt0OelBCnaemMpnaoesnziKn0",
             authDomain: "prestamas-36107.firebaseapp.com",
@@ -343,98 +238,77 @@
             messagingSenderId: "664528103707",
             appId: "1:664528103707:web:0b56c9ea098cf8709e4bbe"
         };
+
         const app = initializeApp(firebaseConfig);
     </script>
 
     <script>
-        // Lógica de sesión
-        window.onload = function() {
-            var usuarioActivo = localStorage.getItem('usuario');
-            var nombreActivo = localStorage.getItem('nombre');
-            if (!usuarioActivo) {
-                window.location.href = "index.html";
-            } else {
-                document.getElementById('nombreUsuario').innerText = nombreActivo || usuarioActivo;
-            }
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+        const passwordField = document.getElementById('password');
+
+        togglePasswordIcon.addEventListener('click', function () {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        function iniciarSesion() {
+            var user = document.getElementById("username").value;
+            var pass = document.getElementById("password").value;
+            var btnLogin = document.getElementById("btn-login");
+            var mensajeDiv = document.getElementById("mensaje");
             
-            // Inicializar las gráficas al cargar la página
-            initCharts();
-        };
+            if (!user || !pass) {
+                mensajeDiv.innerText = "Ingresa tus credenciales";
+                mensajeDiv.style.color = "#d93025";
+                return;
+            }
 
-        // Lógica para abrir/cerrar menú en celular
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-            document.getElementById('sidebarOverlay').classList.toggle('open');
-        }
+            btnLogin.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Validando...';
+            btnLogin.disabled = true;
+            mensajeDiv.innerText = "";
+            
+            // Nueva URL proporcionada de Google Apps Script (sin cambios)
+            var scriptURL = "https://script.google.com/macros/s/AKfycbxbkYqEG5otbzz3ZtyqRUeFuYEhcElSEuJvkR0wN0XZvDTrP0Xz1shE4YFzxLGm7Kld/exec";
 
-        // LÓGICA DE LAS GRÁFICAS (Chart.js)
-        function initCharts() {
-            // 1. Gráfica de Líneas (Evolución)
-            const ctxLine = document.getElementById('lineChart').getContext('2d');
-            new Chart(ctxLine, {
-                type: 'line',
-                data: {
-                    labels: ['Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May'],
-                    datasets: [
-                        {
-                            label: 'Créditos Solicitados',
-                            data: [5, 8, 12, 10, 15, 14],
-                            borderColor: '#09384C', // Azul oscuro
-                            backgroundColor: 'rgba(9, 56, 76, 0.1)',
-                            borderWidth: 3,
-                            fill: true,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Nuevas Inversiones',
-                            data: [2, 3, 5, 4, 7, 8],
-                            borderColor: '#05C574', // Verde principal
-                            backgroundColor: 'rgba(5, 197, 116, 0.1)',
-                            borderWidth: 3,
-                            fill: true,
-                            tension: 0.4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top' }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify({ usuario: user, contrasena: pass }),
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8'
                 }
-            });
-
-            // 2. Gráfica de Anillo (Estado de Cartera)
-            const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
-            new Chart(ctxDoughnut, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Aprobados', 'En Revisión', 'Pendientes Doc.'],
-                    datasets: [{
-                        data: [24, 6, 4],
-                        backgroundColor: [
-                            '#05C574', // Verde (Aprobado)
-                            '#09384C', // Azul (Revisión)
-                            '#f39c12'  // Naranja (Pendiente)
-                        ],
-                        borderWidth: 0,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '70%', // Hueco del anillo
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
+            })
+            .then(response => response.json())
+            .then(respuesta => {
+                btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
+                btnLogin.disabled = false;
+                
+                if(respuesta.success) {
+                    mensajeDiv.style.color = "#188038";
+                    mensajeDiv.innerText = "¡Bienvenido! Redirigiendo...";
+                    
+                    localStorage.setItem('usuario', user); 
+                    localStorage.setItem('privilegio', respuesta.privilegio);
+                    localStorage.setItem('nombre', respuesta.nombre); 
+                    
+                    setTimeout(() => {
+                        window.location.href = "inicio.html";
+                    }, 1000);
+                } else {
+                    mensajeDiv.style.color = "#d93025";
+                    mensajeDiv.innerText = respuesta.mensaje;
                 }
+            })
+            .catch(error => {
+                btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar sesión';
+                btnLogin.disabled = false;
+                mensajeDiv.style.color = "#d93025";
+                mensajeDiv.innerText = "Error de red. Reintenta.";
+                console.error('Error:', error);
             });
         }
     </script>
+
 </body>
 </html>
