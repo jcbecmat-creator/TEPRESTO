@@ -6,530 +6,121 @@
     <title>Perfil Cliente - PrestaMas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary-green: #05C574;
-            --dark-blue: #09384C;
-            --bg-light: #f4f7f6;
-            --text-main: #2c3e50;
-            --border-color: #e0e0e0;
-        }
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-light);
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Contenedor Principal Flex */
-        .app-container {
-            display: flex;
-            height: 100vh;
-            width: 100vw;
-        }
-
-        /* --- MENÚ LATERAL (IFRAME) --- */
-        .sidebar-wrapper {
-            width: 260px;
-            height: 100vh;
-            background-color: #ffffff;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-            z-index: 1000;
-            flex-shrink: 0;
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-        }
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(9, 56, 76, 0.5);
-            z-index: 999;
-        }
-
-        /* --- CONTENIDO PRINCIPAL --- */
-        .main-wrapper {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .top-stripe, .bottom-stripe {
-            background-color: var(--primary-green);
-            height: 12px;
-            width: 100%;
-            flex-shrink: 0;
-        }
-
-        .mobile-header {
-            display: none;
-            background: #ffffff;
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--border-color);
-            align-items: center;
-            justify-content: space-between;
-        }
-
+        :root { --primary-green: #05C574; --dark-blue: #09384C; --bg-light: #f4f7f6; --text-main: #2c3e50; --border-color: #e0e0e0; }
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-light); height: 100vh; overflow: hidden; }
+        .app-container { display: flex; height: 100vh; width: 100vw; }
+        .sidebar-wrapper { width: 260px; height: 100vh; background-color: #ffffff; box-shadow: 2px 0 10px rgba(0,0,0,0.05); z-index: 1000; flex-shrink: 0; transition: transform 0.3s ease; }
+        .sidebar-wrapper iframe { width: 100%; height: 100%; border: none; display: block; }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(9, 56, 76, 0.5); z-index: 999; }
+        .main-wrapper { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
+        .top-stripe, .bottom-stripe { background-color: var(--primary-green); height: 12px; width: 100%; flex-shrink: 0; }
+        .mobile-header { display: none; background: #ffffff; padding: 15px 20px; border-bottom: 1px solid var(--border-color); align-items: center; justify-content: space-between; }
         .mobile-header img { height: 35px; }
-
-        .hamburger-btn {
-            background: transparent;
-            border: none;
-            font-size: 24px;
-            color: var(--dark-blue);
-            cursor: pointer;
-        }
-
-        /* --- ÁREA DE TRABAJO (FORMULARIO) --- */
-        .content-area {
-            padding: 40px 20px;
-            flex-grow: 1;
-            box-sizing: border-box;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .form-card {
-            background-color: #ffffff;
-            max-width: 650px;
-            width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            padding: 40px;
-            box-sizing: border-box;
-            position: relative;
-            margin-bottom: 80px; /* Espacio para los botones flotantes */
-        }
-
-        .step-info {
-            text-align: center;
-            color: #888888;
-            font-size: 14px;
-            margin-bottom: 10px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        h2 {
-            text-align: center;
-            color: var(--dark-blue);
-            font-size: 24px;
-            margin-top: 0;
-            margin-bottom: 30px;
-        }
-
+        .hamburger-btn { background: transparent; border: none; font-size: 24px; color: var(--dark-blue); cursor: pointer; }
+        .content-area { padding: 40px 20px; flex-grow: 1; box-sizing: border-box; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .form-card { background-color: #ffffff; max-width: 650px; width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); padding: 40px; box-sizing: border-box; position: relative; margin-bottom: 80px; }
+        .step-info { text-align: center; color: #888888; font-size: 14px; margin-bottom: 10px; font-weight: bold; text-transform: uppercase; }
+        h2 { text-align: center; color: var(--dark-blue); font-size: 24px; margin-top: 0; margin-bottom: 30px; }
         .form-step { display: none; }
         .form-step.active { display: block; animation: fadeIn 0.4s; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--dark-blue);
-        }
-
-        input[type="text"], input[type="number"], select, textarea {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 15px;
-            margin-bottom: 20px;
-            outline: none;
-            transition: border-color 0.3s;
-            background-color: #fcfcfc;
-        }
-
-        input:focus, select:focus, textarea:focus { 
-            border-color: var(--primary-green); 
-            background-color: #ffffff;
-        }
-
-        /* Botones de Opción */
-        .options-flex {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .opt-btn {
-            flex: 1;
-            min-width: 100px;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            text-align: center;
-            font-weight: 500;
-            transition: all 0.2s;
-            color: var(--text-main);
-        }
-
-        .opt-btn.active {
-            border-color: var(--primary-green);
-            background-color: #e8f9f1;
-            color: var(--primary-green);
-            font-weight: bold;
-        }
-
-        /* Documentos */
-        .doc-card {
-            border: 1px dashed #b0c4de;
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
-            margin-bottom: 20px;
-            background-color: #f8fafc;
-        }
-
-        .btn-cam {
-            background-color: var(--dark-blue);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .info-yellow {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 20px;
-            border: 1px solid #ffeeba;
-            line-height: 1.5;
-        }
-
-        /* Botones de Navegación (Fijos al contenedor) */
-        .nav-buttons {
-            position: absolute;
-            bottom: -70px;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .btn-nav {
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-            min-width: 140px;
-            transition: all 0.3s;
-        }
-
-        .btn-back { 
-            background: #ffffff; 
-            color: var(--dark-blue); 
-            border: 1px solid var(--dark-blue); 
-        }
-        
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--dark-blue); }
+        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; font-size: 15px; margin-bottom: 20px; outline: none; transition: border-color 0.3s; background-color: #fcfcfc; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-green); background-color: #ffffff; }
+        .options-flex { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .opt-btn { flex: 1; min-width: 100px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: white; cursor: pointer; text-align: center; font-weight: 500; transition: all 0.2s; color: var(--text-main); }
+        .opt-btn.active { border-color: var(--primary-green); background-color: #e8f9f1; color: var(--primary-green); font-weight: bold; }
+        .doc-card { border: 1px dashed #b0c4de; padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 20px; background-color: #f8fafc; }
+        .btn-cam { background-color: var(--dark-blue); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; margin-top: 10px; font-weight: bold; }
+        .info-yellow { background-color: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; border: 1px solid #ffeeba; line-height: 1.5; }
+        .nav-buttons { position: absolute; bottom: -70px; left: 0; width: 100%; display: flex; justify-content: space-between; gap: 20px; }
+        .btn-nav { padding: 15px 30px; border-radius: 30px; font-size: 15px; font-weight: bold; cursor: pointer; border: none; min-width: 140px; transition: all 0.3s; }
+        .btn-back { background: #ffffff; color: var(--dark-blue); border: 1px solid var(--dark-blue); }
         .btn-back:hover { background: #f0f4f8; }
-        
-        .btn-next { 
-            background: var(--primary-green); 
-            color: white; 
-            box-shadow: 0 4px 10px rgba(5, 197, 116, 0.2);
-        }
-        
+        .btn-next { background: var(--primary-green); color: white; box-shadow: 0 4px 10px rgba(5, 197, 116, 0.2); }
         .btn-next:hover { background: #04A863; }
-
-        @media (max-width: 900px) {
-            .sidebar-wrapper { position: fixed; left: -260px; }
-            .sidebar-wrapper.open { transform: translateX(260px); }
-            .sidebar-overlay.open { display: block; }
-            .mobile-header { display: flex; }
-            .content-area { padding: 20px 15px; }
-            .form-card { padding: 25px 20px; }
-        }
+        @media (max-width: 900px) { .sidebar-wrapper { position: fixed; left: -260px; } .sidebar-wrapper.open { transform: translateX(260px); } .sidebar-overlay.open { display: block; } .mobile-header { display: flex; } .content-area { padding: 20px 15px; } .form-card { padding: 25px 20px; } }
     </style>
 </head>
 <body>
-
     <div class="app-container">
-
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-
-        <aside class="sidebar-wrapper" id="sidebar">
-            <iframe src="menu.html" title="Menú de Navegación"></iframe>
-        </aside>
-
+        <aside class="sidebar-wrapper" id="sidebar"><iframe src="menu.html" title="Menú de Navegación"></iframe></aside>
         <main class="main-wrapper">
             <div class="top-stripe"></div>
-
             <div class="mobile-header">
-                <button class="hamburger-btn" onclick="toggleSidebar()">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" alt="Logo PrestaMas">
+                <button class="hamburger-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" alt="Logo">
             </div>
-
             <div class="content-area">
-                
                 <div class="form-card">
                     <form id="perfilForm">
-                        
                         <div class="form-step active" id="step1">
                             <p class="step-info">Paso 1 de 10</p>
                             <h2>¿Cómo te llamas?</h2>
-                            <label>Nombre(s)</label>
-                            <input type="text" id="nombre" placeholder="Ej. Juan Carlos">
-                            <label>Primer apellido</label>
-                            <input type="text" id="apellidop" placeholder="Ej. Becerra">
-                            <label>Segundo apellido</label>
-                            <input type="text" id="apellidom" placeholder="Ej. Mata">
-                            <label>Género</label>
-                            <div class="options-flex">
-                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Hombre</button>
-                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Mujer</button>
-                            </div>
+                            <label>Nombre(s)</label><input type="text" placeholder="Ej. Juan Carlos">
+                            <label>Primer apellido</label><input type="text" placeholder="Ej. Becerra">
+                            <label>Segundo apellido</label><input type="text" placeholder="Ej. Mata">
                         </div>
-
-                        <div class="form-step" id="step2">
-                            <p class="step-info">Paso 2 de 10</p>
-                            <h2>¿Cuándo y dónde naciste?</h2>
-                            <label>Fecha de nacimiento</label>
-                            <div style="display: flex; gap:10px">
-                                <select id="dia"><option>Día</option></select>
-                                <select id="mes"><option>Mes</option></select>
-                                <select id="anio"><option>Año</option></select>
-                            </div>
-                            <label>Estado de nacimiento</label>
-                            <select id="estado_nac">
-                                <option value="">Selecciona el estado</option>
-                                <option>MEXICO</option>
-                                <option>CIUDAD DE MÉXICO</option>
-                                <option>JALISCO</option>
-                                <option>NUEVO LEÓN</option>
-                            </select>
-                        </div>
-
-                        <div class="form-step" id="step3">
-                            <p class="step-info">Paso 3 de 10</p>
-                            <h2>¿Cuál es tu CURP?</h2>
-                            <input type="text" id="curp" placeholder="Ingresa tu CURP de 18 dígitos">
-                            <div class="info-yellow">
-                                <i class="fas fa-info-circle"></i> Asegúrate de que tu CURP coincida exactamente con tu identificación oficial.
-                            </div>
-                        </div>
-
-                        <div class="form-step" id="step4">
-                            <p class="step-info">Paso 4 de 10</p>
-                            <h2>Confirma tu crédito</h2>
-                            <label>Monto a solicitar</label>
-                            <input type="number" id="monto" value="50000">
-                            <label>Meses</label>
-                            <div class="options-flex">
-                                <button type="button" class="opt-btn" onclick="selectOpt(this)">6</button>
-                                <button type="button" class="opt-btn" onclick="selectOpt(this)">12</button>
-                                <button type="button" class="opt-btn" onclick="selectOpt(this)">18</button>
-                                <button type="button" class="opt-btn active" onclick="selectOpt(this)">24</button>
-                                <button type="button" class="opt-btn" onclick="selectOpt(this)">36</button>
-                            </div>
-                            <label>Destino del dinero</label>
-                            <select id="destino">
-                                <option>Pagar Deudas</option>
-                                <option>Gastos Familiares</option>
-                                <option>Negocio</option>
-                            </select>
-                        </div>
-
-                        <div class="form-step" id="step5">
-                            <p class="step-info">Paso 5 de 10</p>
-                            <h2>¿Dónde vives?</h2>
-                            <label>Calle</label>
-                            <input type="text" id="calle">
-                            <div style="display:flex; gap:10px">
-                                <input type="text" placeholder="Num Ext" style="flex:1">
-                                <input type="text" placeholder="Num Int" style="flex:1">
-                                <input type="text" placeholder="C.P." style="flex:1">
-                            </div>
-                            <label>Tipo de vivienda</label>
-                            <div class="options-flex">
-                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Rentada</button>
-                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Familiar</button>
-                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Propia</button>
-                            </div>
-                        </div>
-
-                        <div class="form-step" id="step6">
-                            <p class="step-info">Paso 6 de 10</p>
-                            <h2>Situación laboral</h2>
-                            <label>Ocupación</label>
-                            <div class="options-flex">
-                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Empleado</button>
-                                <button type="button" class="opt-btn" onclick="selectOpt(this)">Negocio Propio</button>
-                            </div>
-                            <label>Ingreso mensual comprobable (Libre)</label>
-                            <input type="number" placeholder="$ 0.00">
-                        </div>
-
-                        <div class="form-step" id="step7">
-                            <p class="step-info">Paso 7 de 10</p>
-                            <h2>Referencias</h2>
-                            <label>Referencia Familiar 1</label>
-                            <input type="text" placeholder="Nombre completo">
-                            <input type="text" placeholder="Teléfono a 10 dígitos">
-                            <label>Referencia Personal (No familiar)</label>
-                            <input type="text" placeholder="Nombre completo">
-                            <input type="text" placeholder="Teléfono a 10 dígitos">
-                        </div>
-
+                        
                         <div class="form-step" id="step8">
                             <p class="step-info">Paso 8 de 10</p>
                             <h2>Sube tu documentación</h2>
                             
+                            <div class="doc-card" style="background-color: #e8f9f1; border-color: var(--primary-green);">
+                                <p><strong>Fotografía de Perfil (Selfie)</strong></p>
+                                <p style="font-size: 12px; color: #666;">Tómate una foto clara donde se vea tu rostro completo.</p>
+                                <button type="button" class="btn-cam" onclick="captureImg('selfie')" style="background-color: var(--primary-green);">
+                                    <i class="fas fa-camera"></i> Tomar Selfie
+                                </button>
+                            </div>
+
                             <div class="doc-card">
                                 <p><strong>INE Parte Frontal</strong></p>
-                                <button type="button" class="btn-cam" onclick="captureImg('ine_frontal')">
-                                    <i class="fas fa-camera"></i> Tomar Foto
-                                </button>
+                                <button type="button" class="btn-cam" onclick="captureImg('ine_frontal')"><i class="fas fa-camera"></i> Tomar Foto</button>
                             </div>
-
                             <div class="doc-card">
                                 <p><strong>INE Parte Posterior</strong></p>
-                                <button type="button" class="btn-cam" onclick="captureImg('ine_posterior')">
-                                    <i class="fas fa-camera"></i> Tomar Foto
-                                </button>
+                                <button type="button" class="btn-cam" onclick="captureImg('ine_posterior')"><i class="fas fa-camera"></i> Tomar Foto</button>
                             </div>
-
                             <div class="doc-card">
                                 <p><strong>Comprobante de Domicilio</strong></p>
                                 <input type="file" id="pdf_domicilio" accept="application/pdf" style="display:none">
-                                <button type="button" class="btn-cam" onclick="document.getElementById('pdf_domicilio').click()" style="background:var(--primary-green)">
-                                    <i class="fas fa-file-pdf"></i> Subir PDF
-                                </button>
+                                <button type="button" class="btn-cam" onclick="document.getElementById('pdf_domicilio').click()" style="background:var(--primary-green)"><i class="fas fa-file-pdf"></i> Subir PDF</button>
                             </div>
-                        </div>
-
-                        <div class="form-step" id="step9">
-                            <p class="step-info">Paso 9 de 10</p>
-                            <h2>¿Dónde depositamos?</h2>
-                            <label>CLABE Interbancaria (18 dígitos)</label>
-                            <input type="text" id="clabe" maxlength="18" placeholder="000 000 000 000 000 000">
-                            <p style="font-size: 13px; color: #888; text-align: center;">La cuenta debe estar a tu nombre.</p>
                         </div>
 
                         <div class="form-step" id="step10">
                             <p class="step-info">Paso Final</p>
                             <h2>¡Todo listo!</h2>
-                            <div class="info-yellow">
-                                <i class="fas fa-shield-alt"></i> Al hacer clic en guardar, confirmas que la información es verídica y autorizas a PrestaMas para consultar tu historial crediticio.
-                            </div>
                             <button type="button" class="btn-next" style="width: 100%; margin-top: 20px;" onclick="finalizar()">Guardar mi perfil de cliente</button>
                         </div>
-
                     </form>
-
                     <div class="nav-buttons">
                         <button type="button" class="btn-nav btn-back" id="btnBack" onclick="changeStep(-1)">Regresar</button>
                         <button type="button" class="btn-nav btn-next" id="btnNext" onclick="changeStep(1)" style="margin-left: auto;">Continuar</button>
                     </div>
-
                 </div>
             </div>
-
             <div class="bottom-stripe"></div>
         </main>
     </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDkzzRJ1Ovt0OelBCnaemMpnaoesnziKn0",
-            authDomain: "prestamas-36107.firebaseapp.com",
-            projectId: "prestamas-36107",
-            storageBucket: "prestamas-36107.firebasestorage.app",
-            messagingSenderId: "664528103707",
-            appId: "1:664528103707:web:0b56c9ea098cf8709e4bbe"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const storage = getStorage(app);
-
-        window.captureImg = function(nombre) {
-            alert("Abriendo cámara para: " + nombre);
-        }
-    </script>
-
     <script>
-        // Lógica del Formulario
         let currentStep = 1;
         const totalSteps = 10;
-
         function changeStep(n) {
             const steps = document.querySelectorAll('.form-step');
             if (currentStep + n < 1 || currentStep + n > totalSteps) return;
-
             steps[currentStep - 1].classList.remove('active');
             currentStep += n;
             steps[currentStep - 1].classList.add('active');
-
-            // Control de visibilidad de botones inferiores
             document.getElementById('btnBack').style.visibility = (currentStep === 1) ? 'hidden' : 'visible';
             document.getElementById('btnNext').style.display = (currentStep === totalSteps) ? 'none' : 'block';
-            
-            // Subir la vista al inicio del contenedor
             document.querySelector('.main-wrapper').scrollTo({ top: 0, behavior: 'smooth' });
         }
-
-        function selectOpt(btn) {
-            const buttons = btn.parentElement.querySelectorAll('.opt-btn');
-            buttons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-
-        function finalizar() {
-            alert("¡Perfil guardado con éxito! Nuestro equipo revisará tu información.");
-            window.location.href = "inicio.html";
-        }
-
-        // Llenar selects de fechas
-        for(let i=1; i<=31; i++) document.getElementById('dia').innerHTML += `<option>${i}</option>`;
-        const meses = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-        meses.forEach(m => document.getElementById('mes').innerHTML += `<option>${m}</option>`);
-        for(let i=2008; i>=1950; i--) document.getElementById('anio').innerHTML += `<option>${i}</option>`;
-
-        // Ocultar botón regresar al cargar
-        document.getElementById('btnBack').style.visibility = 'hidden';
-
-        // Lógica del Menú Móvil
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-            document.getElementById('sidebarOverlay').classList.toggle('open');
-        }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('open'); }
+        function finalizar() { alert("¡Perfil guardado!"); window.location.href = "inicio.html"; }
+        window.captureImg = function(nombre) { alert("Abriendo cámara para: " + nombre); }
     </script>
 </body>
 </html>
