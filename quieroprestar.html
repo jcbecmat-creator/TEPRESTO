@@ -24,6 +24,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* Franjas Verdes */
@@ -77,6 +78,8 @@
             margin: 0 auto;
             padding: 40px 20px;
             flex-grow: 1;
+            box-sizing: border-box;
+            width: 100%;
         }
 
         .calculator-wrapper {
@@ -88,6 +91,8 @@
         /* Panel Izquierdo */
         .form-section {
             flex: 0.8;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .form-section h1 {
@@ -116,6 +121,8 @@
             border-radius: 8px;
             font-size: 16px;
             outline: none;
+            box-sizing: border-box;
+            width: 100%;
         }
 
         .input-inline-group input:focus {
@@ -132,6 +139,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
+            white-space: nowrap;
         }
 
         .btn-simular:hover {
@@ -146,6 +154,8 @@
             padding: 40px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .results-section h3 {
@@ -174,9 +184,18 @@
             margin-top: 20px;
         }
 
+        /* CORRECCIONES PARA MÓVIL */
         @media (max-width: 900px) {
-            .calculator-wrapper { flex-direction: column; }
+            .calculator-wrapper { flex-direction: column; gap: 30px; }
             .form-section, .results-section { width: 100%; }
+            .header { padding: 15px 20px; }
+            .main-logo { width: 150px; }
+            .results-section { padding: 25px 15px; }
+            .chart-container { height: 250px; }
+            
+            /* Apilar input y botón en móvil */
+            .input-inline-group { flex-direction: column; align-items: stretch; gap: 10px; }
+            .btn-simular { width: 100%; }
         }
     </style>
 </head>
@@ -207,7 +226,7 @@
                 <div class="chart-container">
                     <canvas id="rendimientoChart"></canvas>
                 </div>
-                <a href="perfilinversionista.html" class="btn-empezar">Empezar a invertir</a>
+                <a href="index.html" class="btn-empezar">Empezar a invertir</a>
             </div>
         </div>
     </div>
