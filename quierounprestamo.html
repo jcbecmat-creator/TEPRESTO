@@ -22,6 +22,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            scroll-behavior: smooth; /* Para que el scroll sea suave */
         }
 
         /* Franjas Verdes */
@@ -106,6 +107,9 @@
             cursor: pointer;
             font-weight: bold;
             transition: 0.3s;
+            /* Evita selección de texto al tocar en móvil */
+            user-select: none; 
+            -webkit-tap-highlight-color: transparent;
         }
 
         .month-btn.active { background-color: var(--dark-blue); color: white; }
@@ -141,7 +145,11 @@
             margin-top: 30px;
         }
 
-        @media (max-width: 768px) { .calculator-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { 
+            .calculator-grid { grid-template-columns: 1fr; } 
+            header { padding: 15px 20px; }
+            .logo-img { height: 30px; }
+        }
     </style>
 </head>
 <body>
@@ -174,14 +182,14 @@
                 </div>
             </div>
 
-            <div class="results-section">
+            <div class="results-section" id="resultados">
                 <h3>Tu pago mensual estimado</h3>
                 <div class="monthly-payment" id="pagoDisplay">$2,538</div>
                 <p style="font-size:13px; color:#a8c1cf;">Tasa promedio anual del 18.9%*</p>
             </div>
         </div>
 
-        <button class="btn-cta" onclick="window.location.href='perfilcliente.html'">Solicitar mi préstamo ahora</button>
+        <button class="btn-cta" onclick="window.location.href='index.html'">Solicitar mi préstamo ahora</button>
     </div>
 
     <div class="bottom-stripe"></div>
@@ -213,6 +221,13 @@
                 this.classList.add('active');
                 mesesSeleccionados = parseInt(this.getAttribute('data-meses'));
                 actualizarSimulador();
+
+                // Lógica de SCROLL AUTOMÁTICO solo en celulares
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        document.getElementById('resultados').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 150); // Pequeño retraso para que se note la actualización del número
+                }
             });
         });
 
