@@ -33,9 +33,7 @@
             width: 100%;
         }
 
-        .bottom-stripe {
-            margin-top: auto;
-        }
+        .bottom-stripe { margin-top: auto; }
 
         .header {
             display: flex;
@@ -98,36 +96,51 @@
             margin-bottom: 12px;
         }
 
-        .input-inline-group {
+        /* --- CORRECCIÓN LAYOUT INPUT Y BOTÓN --- */
+        .input-block-group {
             display: flex;
+            flex-direction: column; /* Apilados verticalmente */
             gap: 15px;
-            align-items: center;
         }
 
-        .input-inline-group input {
-            flex: 1;
+        .input-block-group input {
+            width: 100%;
             padding: 16px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 16px;
             outline: none;
             box-sizing: border-box;
-            width: 100%;
         }
 
-        .input-inline-group input:focus { border-color: var(--primary-green); }
+        .input-block-group input:focus { border-color: var(--primary-green); }
 
+        /* Estilo para mostrar la moneda formateada debajo del input */
+        .currency-formatted-display {
+            font-size: 18px;
+            color: var(--primary-green);
+            font-weight: bold;
+            margin-top: -5px;
+            margin-bottom: 5px;
+            min-height: 22px; /* Mantiene el espacio si está vacío */
+        }
+
+        /* Botón simular igual al CTA */
         .btn-simular {
             background-color: var(--primary-green);
             color: #ffffff;
             border: none;
-            padding: 16px 30px;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 18px;
+            border-radius: 30px; /* Redondeado igual al otro */
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
-            white-space: nowrap;
+            width: 100%; /* Ancho completo */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .btn-simular:hover { background-color: #04A863; }
@@ -151,16 +164,21 @@
             color: white;
             border: none;
             padding: 18px 50px;
-            border-radius: 8px;
+            border-radius: 30px; /* Unificado */
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             margin-top: 20px;
+            width: 100%; /* Unificado */
+            box-sizing: border-box;
         }
+        .btn-empezar:hover { background-color: #04A863; }
 
-        /* --- NUEVA SECCIÓN: LOS 4 PILARES --- */
         .features-section {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -171,15 +189,13 @@
             padding-top: 40px;
         }
 
-        .feature-box {
-            padding: 10px;
-        }
+        .feature-box { padding: 10px; }
 
         .feature-icon {
             width: 75px;
             height: 75px;
             margin: 0 auto 15px auto;
-            border-radius: 22px; /* Bordes redondeados como en la imagen */
+            border-radius: 22px; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -188,24 +204,37 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        .feature-box h4 {
-            color: var(--dark-blue);
-            margin: 0 0 10px 0;
-            font-size: 17px;
-        }
+        .feature-box h4 { color: var(--dark-blue); margin: 0 0 10px 0; font-size: 17px; }
+        .feature-box p { color: #555; font-size: 14px; line-height: 1.5; margin: 0; }
 
-        .feature-box p {
-            color: #555;
-            font-size: 14px;
-            line-height: 1.5;
-            margin: 0;
-        }
-
-        /* Colores de los íconos extraídos de la referencia */
         .bg-green-icon { background-color: #27ae60; }
         .bg-blue-icon { background-color: #2980b9; }
         .bg-purple-icon { background-color: #5e468c; }
         .bg-teal-icon { background-color: #0d7a81; }
+
+        /* --- NUEVA SECCIÓN LEYENDA FINAL (Imagen 4) --- */
+        .final-legend-section {
+            margin-top: 60px;
+            padding: 30px;
+            background-color: var(--light-green-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .final-legend-section p { margin: 0 0 15px 0; }
+        .final-legend-section p:last-child { margin-bottom: 0; }
+        .contact-info-block {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+            font-weight: bold;
+            color: var(--dark-blue);
+            text-align: center;
+        }
 
         @media (max-width: 900px) {
             .calculator-wrapper { flex-direction: column; gap: 30px; }
@@ -214,15 +243,11 @@
             .main-logo { width: 150px; }
             .results-section { padding: 25px 15px; }
             .chart-container { height: 250px; }
-            .input-inline-group { flex-direction: column; align-items: stretch; gap: 10px; }
-            .btn-simular { width: 100%; }
-            
-            /* Los 4 pilares a 2 columnas en tablet */
             .features-section { grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 40px; }
+            .final-legend-section { padding: 20px; margin-top: 40px;}
         }
 
         @media (max-width: 600px) {
-            /* Los 4 pilares a 1 columna en teléfonos */
             .features-section { grid-template-columns: 1fr; gap: 40px; }
         }
     </style>
@@ -233,7 +258,8 @@
 
     <div class="header">
         <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" alt="Logo PrestaMas" class="main-logo">
-        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver</a>
+        <a href="index.html" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Volver </a>
     </div>
 
     <div class="container">
@@ -242,9 +268,10 @@
                 <h1>Simula tu inversión</h1>
                 <div class="input-group">
                     <label>¿Cuánto quieres invertir?</label>
-                    <div class="input-inline-group">
-                        <input type="number" id="montoInversion" value="5000" min="1000" step="1000">
-                        <button class="btn-simular" onclick="simularInversion()">Simular</button>
+                    <div class="input-block-group"> <input type="number" id="montoInversion" value="5000" min="1000" step="1000" placeholder="Ej. 10000">
+                        <div class="currency-formatted-display" id="montoFormateado">$5,000.00</div> 
+                        <button class="btn-simular" onclick="simularInversion()">
+                            <i class="fas fa-calculator"></i> Simular </button>
                     </div>
                 </div>
             </div>
@@ -254,41 +281,47 @@
                 <div class="chart-container">
                     <canvas id="rendimientoChart"></canvas>
                 </div>
-                <a href="index.html" class="btn-empezar">Empezar a invertir</a>
+                <a href="index.html" class="btn-empezar">
+                    <i class="fas fa-rocket"></i> Empezar a invertir </a>
             </div>
         </div>
 
         <div class="features-section">
             <div class="feature-box">
                 <div class="feature-icon bg-green-icon">
-                    <i class="fas fa-chart-simple"></i>
-                </div>
+                    <i class="fas fa-chart-line"></i> </div>
                 <h4>Buenos rendimientos</h4>
                 <p>Puedes ganar con tasas de hasta 38.90% anual.</p>
             </div>
             
             <div class="feature-box">
                 <div class="feature-icon bg-blue-icon">
-                    <i class="fas fa-money-bill-transfer"></i>
-                </div>
+                    <i class="fas fa-hand-holding-dollar"></i> </div>
                 <h4>Accesible</h4>
                 <p>Puedes invertir desde $200, sólo necesitas una cuenta bancaria e internet.</p>
             </div>
             
             <div class="feature-box">
                 <div class="feature-icon bg-purple-icon">
-                    <i class="fas fa-magnifying-glass"></i>
-                </div>
+                    <i class="fas fa-eye"></i> </div>
                 <h4>Transparente</h4>
                 <p>Sabes exactamente el destino, plazo, retorno y riesgo de tu inversión.</p>
             </div>
 
             <div class="feature-box">
                 <div class="feature-icon bg-teal-icon">
-                    <i class="fas fa-window-maximize"></i>
-                </div>
+                    <i class="fas fa-mobile-screen-button"></i> </div>
                 <h4>Sencillo</h4>
                 <p>Todo por internet y sin necesidad de ser un experto en finanzas.</p>
+            </div>
+        </div>
+
+        <div class="final-legend-section">
+            <p>*PrestaMas, S.A. de C.V. es una institución financiera constituida de conformidad con las leyes mexicanas. Opere bajo la supervisión de la Comisión Nacional Bancaria y de Valores (CNBV) y la Comisión Nacional para la Protección y Defensa de los Usuarios de Servicios Financieros (CONDUSEF).</p>
+            <p>Los rendimientos pasados no garantizan rendimientos futuros. Las inversiones realizadas a través de PrestaMas no están garantizadas por ninguna institución pública ni por el IPAB, al tratarse de operaciones entre particulares.</p>
+            <p>Domicilio Social: Av. Paseo de la Reforma 123, Piso 10, Col. Cuauhtémoc, Ciudad de México, C.P. 06500.</p>
+            <div class="contact-info-block">
+                Contacto: (55) 1234-5678 | soporte@prestamas.com.mx
             </div>
         </div>
     </div>
@@ -297,11 +330,26 @@
 
     <script>
         const ctx = document.getElementById('rendimientoChart').getContext('2d');
+        const montoInput = document.getElementById('montoInversion');
+        const montoFormateadoDisplay = document.getElementById('montoFormateado');
         let chartInstance = null;
         const TASA_ANUAL = 0.1652;
 
+        // Formateador de moneda completo ($1,000.00)
+        const formatterFull = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        // Actualizar visualización de moneda mientras se escribe
+        montoInput.addEventListener('input', function() {
+            let val = parseFloat(this.value);
+            if (!isNaN(val) && val >= 0) {
+                montoFormateadoDisplay.innerText = formatterFull.format(val);
+            } else {
+                montoFormateadoDisplay.innerText = "$0.00";
+            }
+        });
+
         function simularInversion() {
-            let montoBase = parseFloat(document.getElementById('montoInversion').value);
+            let montoBase = parseFloat(montoInput.value);
             if (isNaN(montoBase) || montoBase <= 0) return alert("Ingresa un monto válido");
 
             const anos = [1, 2, 3, 4, 5];
@@ -331,6 +379,8 @@
                 });
             }
         }
+        // Iniciar con formato correcto y simulación
+        montoFormateadoDisplay.innerText = formatterFull.format(parseFloat(montoInput.value));
         window.onload = simularInversion;
     </script>
 </body>
