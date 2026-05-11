@@ -133,7 +133,7 @@
             margin: 10px 0;
         }
 
-        /* --- SECCIÓN DE TABLA COMPARATIVA RESPONSIVA --- */
+        /* --- SECCIÓN DE TABLA COMPARATIVA --- */
         .comparison-section {
             margin-top: 40px;
             padding-top: 30px;
@@ -177,7 +177,6 @@
             color: var(--text-main);
         }
 
-        /* Colores de columnas */
         .col-mejor { background-color: #e8f9f1; color: #05C574 !important; }
         .col-promedio { color: var(--dark-blue) !important; }
         .col-bancos { color: #e74c3c !important; }
@@ -204,7 +203,18 @@
         
         .btn-cta:hover { background-color: #04A863; }
 
-        /* --- MEDIA QUERIES PARA MÓVIL (CORRECCIÓN TABLA CORTADA) --- */
+        /* LEYENDA LEGAL AL FINAL */
+        .final-legend-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 12px;
+            color: #666;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        /* --- SOLUCIÓN PARA QUE LA TABLA SE VEA COMPLETA EN EL CELULAR --- */
         @media (max-width: 768px) { 
             .calculator-grid { grid-template-columns: 1fr; gap: 20px;} 
             header { padding: 15px 20px; }
@@ -214,14 +224,13 @@
             .subtitle { font-size: 14px; margin-bottom: 20px;}
             .monthly-payment { font-size: 32px; }
 
-            /* REDISEÑO DE TABLA A MODO "STACKED" PARA VERSE COMPLETA */
+            /* Convierte la tabla horizontal en tarjetas apiladas */
             .comparison-table, .comparison-table thead, .comparison-table tbody, .comparison-table th, .comparison-table td, .comparison-table tr {
-                display: block; /* Forzamos a que todo sea un bloque vertical */
+                display: block; 
                 width: 100%;
                 box-sizing: border-box;
             }
 
-            /* Ocultamos los encabezados reales de la tabla */
             .comparison-table thead tr {
                 position: absolute;
                 top: -9999px;
@@ -240,7 +249,7 @@
                 border: none;
                 border-bottom: 1px solid #eef2f5;
                 position: relative;
-                padding-left: 50% !important; /* Espacio para el sello/etiqueta */
+                padding-left: 50% !important; 
                 text-align: right !important;
                 font-size: 14px;
             }
@@ -249,7 +258,6 @@
                 border-bottom: 0;
             }
 
-            /* Insertamos los encabezados de columna como etiquetas antes de cada dato */
             .comparison-table td:before {
                 position: absolute;
                 top: 50%;
@@ -265,13 +273,12 @@
                 text-transform: uppercase;
             }
 
-            /* Definimos el texto de cada etiqueta basándonos en la laptop */
-            .comparison-table td:nth-of-type(1):before { content: ""; position: static; width: 100%; display: block; text-align: center; padding: 0; margin-bottom: 10px; color: var(--dark-blue); font-size: 14px;} /* Label de fila */
+            /* Nombres de las columnas para la vista móvil */
+            .comparison-table td:nth-of-type(1):before { content: ""; position: static; width: 100%; display: block; text-align: center; padding: 0; margin-bottom: 10px; color: var(--dark-blue); font-size: 14px;}
             .comparison-table td:nth-of-type(2):before { content: "Nuestra Mejor Tasa"; }
             .comparison-table td:nth-of-type(3):before { content: "Nuestra Tasa Promedio"; }
             .comparison-table td:nth-of-type(4):before { content: "Tasa de los Bancos"; }
 
-            /* Ajustes especiales para la primera celda (label de fila) */
             .row-label {
                 padding-left: 15px !important;
                 text-align: center !important;
@@ -279,7 +286,6 @@
                 border-bottom: 1px solid var(--border-color) !important;
             }
 
-            /* Colores en móvil aplicado a las celdas stacked */
             .col-mejor { background-color: #e8f9f1; font-weight: bold;}
             .col-bancos { background-color: #fff5f5; font-weight: bold;}
             
@@ -293,7 +299,9 @@
 
     <header>
         <img src="https://i.ibb.co/xK0VgNm2/LOGOTIPO-1.jpg" class="logo-img" alt="PrestaMas">
-        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver</a>
+        <a href="index.html" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
     </header>
 
     <div class="container">
@@ -358,6 +366,11 @@
         <button class="btn-cta" onclick="window.location.href='index.html'">
             <i class="fas fa-paper-plane"></i> Solicitar mi préstamo ahora
         </button>
+
+        <div class="final-legend-section">
+            Tasa de interés anual y fija de <strong>8.9%</strong> a <strong>38.9%</strong> sin IVA, sujeta a evaluación y calificación de nuestra área de crédito. Ejemplo representativo: monto de crédito por $425,000.00, con tasa anual de 18.48% y a un plazo de 36 meses. Monto total a pagar: $590,629.55 sin IVA. Sujeto a aprobación de préstamo. <strong>CAT PROMEDIO: 26.05%</strong> sin IVA. Fecha de cálculo 15 de diciembre 2025. Calculado para fines informativos y de comparación exclusivamente.
+        </div>
+
     </div>
 
     <div class="bottom-stripe"></div>
@@ -407,6 +420,7 @@
                 mesesSeleccionados = parseInt(this.getAttribute('data-meses'));
                 actualizarSimulador();
 
+                // Scroll suave automático en celular
                 if (window.innerWidth <= 768) {
                     setTimeout(() => {
                         document.getElementById('resultados').scrollIntoView({ behavior: 'smooth', block: 'center' });
