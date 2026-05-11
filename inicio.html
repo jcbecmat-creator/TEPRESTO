@@ -341,13 +341,10 @@
     </script>
 
     <script>
-        // Variables globales para destruir las gráficas si se recargan
         let myLineChart = null;
         let myDoughnutChart = null;
 
-        // Utilizamos DOMContentLoaded para asegurar que el HTML cargó antes de dibujar
         document.addEventListener("DOMContentLoaded", function() {
-            // Lógica de sesión
             var usuarioActivo = localStorage.getItem('usuario');
             var nombreActivo = localStorage.getItem('nombre');
             
@@ -357,7 +354,6 @@
                 document.getElementById('nombreUsuario').innerText = nombreActivo || usuarioActivo;
             }
             
-            // Dibujar las gráficas de inmediato
             initCharts();
         });
 
@@ -366,18 +362,15 @@
             document.getElementById('sidebarOverlay').classList.toggle('open');
         }
 
-        // LÓGICA DE LAS GRÁFICAS (Chart.js) MEJORADA
         function initCharts() {
             const ctxLine = document.getElementById('lineChart');
             const ctxDoughnut = document.getElementById('doughnutChart');
 
-            if (!ctxLine || !ctxDoughnut) return; // Previene errores si el HTML no está listo
+            if (!ctxLine || !ctxDoughnut) return;
 
-            // Destruir instancias previas para evitar el error "Canvas is already in use"
             if (myLineChart) myLineChart.destroy();
             if (myDoughnutChart) myDoughnutChart.destroy();
 
-            // 1. Gráfica de Líneas
             myLineChart = new Chart(ctxLine.getContext('2d'), {
                 type: 'line',
                 data: {
@@ -411,7 +404,6 @@
                 }
             });
 
-            // 2. Gráfica de Anillo
             myDoughnutChart = new Chart(ctxDoughnut.getContext('2d'), {
                 type: 'doughnut',
                 data: {
