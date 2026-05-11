@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - PrestaMas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary-green: #05C574;
@@ -48,7 +49,6 @@
             display: block;
         }
 
-        /* Fondo oscuro para móvil al abrir menú */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -74,7 +74,7 @@
             flex-shrink: 0;
         }
 
-        /* Encabezado Móvil (Oculto en PC) */
+        /* Encabezado Móvil */
         .mobile-header {
             display: none;
             background: #ffffff;
@@ -84,9 +84,7 @@
             justify-content: space-between;
         }
 
-        .mobile-header img {
-            height: 35px;
-        }
+        .mobile-header img { height: 35px; }
 
         .hamburger-btn {
             background: transparent;
@@ -110,11 +108,9 @@
             margin: 0;
         }
 
-        .welcome-message span {
-            color: var(--primary-green);
-        }
+        .welcome-message span { color: var(--primary-green); }
 
-        /* Área de Trabajo (Dashboard expandido) */
+        /* Área de Trabajo */
         .content-area {
             padding: 40px;
             flex-grow: 1;
@@ -129,12 +125,12 @@
             font-size: 24px;
         }
 
-        /* KPIs (Tarjetas a todo lo ancho) */
+        /* KPIs */
         .kpi-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             width: 100%;
         }
 
@@ -168,6 +164,37 @@
         .kpi-info h3 { margin: 0; font-size: 32px; color: var(--text-main); }
         .kpi-info p { margin: 5px 0 0 0; font-size: 15px; color: #666; font-weight: 500;}
 
+        /* --- SECCIÓN DE GRÁFICAS --- */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr; 
+            gap: 25px;
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        .chart-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-card h3 {
+            margin-top: 0;
+            color: var(--dark-blue);
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .canvas-container {
+            position: relative;
+            height: 280px;
+            width: 100%;
+        }
+
         /* Accesos Rápidos */
         .quick-actions {
             background-color: #ffffff;
@@ -176,6 +203,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.03);
             width: 100%;
             box-sizing: border-box;
+            margin-bottom: 40px;
         }
 
         .action-buttons { display: flex; gap: 20px; flex-wrap: wrap; }
@@ -199,17 +227,14 @@
         .btn-action.blue { background-color: var(--dark-blue); }
         .btn-action:hover { opacity: 0.9; }
 
-        /* --- RESPONSIVIDAD (MÓVIL Y TABLET) --- */
+        /* --- RESPONSIVIDAD --- */
+        @media (max-width: 1100px) {
+            .charts-grid { grid-template-columns: 1fr; }
+        }
+
         @media (max-width: 900px) {
-            .sidebar-wrapper {
-                position: fixed;
-                left: -260px; /* Oculto por defecto */
-            }
-
-            .sidebar-wrapper.open {
-                transform: translateX(260px); /* Deslizar hacia adentro */
-            }
-
+            .sidebar-wrapper { position: fixed; left: -260px; }
+            .sidebar-wrapper.open { transform: translateX(260px); }
             .sidebar-overlay.open { display: block; }
             .mobile-header { display: flex; }
             .content-area { padding: 20px; }
@@ -220,7 +245,6 @@
 <body>
 
     <div class="app-container">
-
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
         <aside class="sidebar-wrapper" id="sidebar">
@@ -270,6 +294,22 @@
                     </div>
                 </div>
 
+                <div class="charts-grid" id="contenedorGraficas">
+                    <div class="chart-card">
+                        <h3>Evolución de Solicitudes (Últimos 6 meses)</h3>
+                        <div class="canvas-container">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3>Estado de la Cartera</h3>
+                        <div class="canvas-container">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="quick-actions">
                     <h2 class="section-title" style="font-size: 18px; margin-bottom: 20px;">Accesos Rápidos</h2>
                     <div class="action-buttons">
@@ -287,22 +327,109 @@
         </main>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyDkzzRJ1Ovt0OelBCnaemMpnaoesnziKn0",
+            authDomain: "prestamas-36107.firebaseapp.com",
+            projectId: "prestamas-36107",
+            storageBucket: "prestamas-36107.firebasestorage.app",
+            messagingSenderId: "664528103707",
+            appId: "1:664528103707:web:0b56c9ea098cf8709e4bbe"
+        };
+        const app = initializeApp(firebaseConfig);
+    </script>
+
     <script>
-        // Lógica de sesión
-        window.onload = function() {
+        // Variables globales para destruir las gráficas si se recargan
+        let myLineChart = null;
+        let myDoughnutChart = null;
+
+        // Utilizamos DOMContentLoaded para asegurar que el HTML cargó antes de dibujar
+        document.addEventListener("DOMContentLoaded", function() {
+            // Lógica de sesión
             var usuarioActivo = localStorage.getItem('usuario');
             var nombreActivo = localStorage.getItem('nombre');
+            
             if (!usuarioActivo) {
                 window.location.href = "index.html";
             } else {
                 document.getElementById('nombreUsuario').innerText = nombreActivo || usuarioActivo;
             }
-        };
+            
+            // Dibujar las gráficas de inmediato
+            initCharts();
+        });
 
-        // Lógica para abrir/cerrar menú en celular
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('sidebarOverlay').classList.toggle('open');
+        }
+
+        // LÓGICA DE LAS GRÁFICAS (Chart.js) MEJORADA
+        function initCharts() {
+            const ctxLine = document.getElementById('lineChart');
+            const ctxDoughnut = document.getElementById('doughnutChart');
+
+            if (!ctxLine || !ctxDoughnut) return; // Previene errores si el HTML no está listo
+
+            // Destruir instancias previas para evitar el error "Canvas is already in use"
+            if (myLineChart) myLineChart.destroy();
+            if (myDoughnutChart) myDoughnutChart.destroy();
+
+            // 1. Gráfica de Líneas
+            myLineChart = new Chart(ctxLine.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May'],
+                    datasets: [
+                        {
+                            label: 'Créditos Solicitados',
+                            data: [5, 8, 12, 10, 15, 14],
+                            borderColor: '#09384C', 
+                            backgroundColor: 'rgba(9, 56, 76, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Nuevas Inversiones',
+                            data: [2, 3, 5, 4, 7, 8],
+                            borderColor: '#05C574', 
+                            backgroundColor: 'rgba(5, 197, 116, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // 2. Gráfica de Anillo
+            myDoughnutChart = new Chart(ctxDoughnut.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Aprobados', 'En Revisión', 'Pendientes Doc.'],
+                    datasets: [{
+                        data: [24, 6, 4],
+                        backgroundColor: ['#05C574', '#09384C', '#f39c12'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
         }
     </script>
 </body>
